@@ -1,1 +1,28 @@
 AULA 01: https://www.youtube.com/watch?v=areBEw5-nrc&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=1
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+AULA 02: https://www.youtube.com/watch?v=jd7U7x6Z_iQ&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=2
+* Aprendizagem supervisionada:
+	Modelos preditivos -> Calssificação e Regressão
+
+* Aprendizagem não supervisionada
+
+* Aprendizagem semi-supervisionada
+
+* Aprendizagem por reforço
+
+* Biblioteca para reconhecimento de imagem: LIME
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+AULA 03: https://www.youtube.com/watch?v=0xw98dvCUzI&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=3
+* pré-processamento: 
+	-eliminar atributos irrelevantes, correlacionados, outliers, duplicados
+	-reduzir dimensionalidade
+	-ferramentas: boxplot, variancia, desvio padrão, média, mediana, covariância, correlação
+	-transformar dados qualitativos em quantitativos, e vice e versa.
+	-normalização: quando o limite superior ou inferior de atributos diferentes estão muito diferentes, 
+		       ou estão em escalas diferentes, dando mais relevância para algumas variáveis.
+	-tipos de normalização: reescala e padronização (melhor para outliers) 
+
