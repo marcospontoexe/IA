@@ -26,3 +26,18 @@ AULA 03: https://www.youtube.com/watch?v=0xw98dvCUzI&list=PLM8TXdmR4D2NfGVIZxXQM
 		       ou estão em escalas diferentes, dando mais relevância para algumas variáveis.
 	-tipos de normalização: reescala e padronização (melhor para outliers) 
 
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+AULA 04: https://www.youtube.com/watch?v=XzGrwHa3wGg&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=4&t=226s
+* Aprendizagem supervisionada:
+	-Support vector machine: Quais amostras A se parecem mais com B, quais B se parecem mais com A, mas eu ainda tenho certeza doque elas são
+	-Naive Bayes: Assume que as variáveis são independentes. Assume uma classe com base na probabilidade de cada variável
+	-RNA: que parte do cérebro fica mais ativada quando recebe amostras de determinada classe.
+	-Learning vector quantization: Cada classe elege uma amostra representante, e essa amostra decide a classe de cada amostra.
+	-Random florest: Para um elevado número de amostras, essas amostras são divididas, e para cada divisão é usado uma árvore de decisão.
+	-Gradient/Ada boosting: usa árvore de decisões, e para as amostras com erro na classificação, é usada outra árvore de decisões.
+* Escolha das variáveis:
+	-Escolher variável que resulta em mais puzera para decidir a classe
+	-Não usar variáveis que pertencem a todas as classes
+	-Ajustar o melhor ponto de corte para as classes (relacionada à variável de saida)
+	-usar árvores de decisões (classe 'DecissionTreeClassifier' da biblioteca sklearn.tree) para decidir quais variáveis são mais relevantes
+	- cuidar com over fiting
