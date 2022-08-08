@@ -41,3 +41,7 @@ AULA 04: https://www.youtube.com/watch?v=XzGrwHa3wGg&list=PLM8TXdmR4D2NfGVIZxXQM
 	-Ajustar o melhor ponto de corte para as classes (relacionada à variável de saida)
 	-usar árvores de decisões (classe 'DecissionTreeClassifier' da biblioteca sklearn.tree) para decidir quais variáveis são mais relevantes
 	- cuidar com over fiting
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+AULA 05: https://www.youtube.com/watch?v=FY9pxsnlch0&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=5
