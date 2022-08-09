@@ -52,4 +52,10 @@ AULA 05: https://www.youtube.com/watch?v=FY9pxsnlch0&list=PLM8TXdmR4D2NfGVIZxXQM
 		- Divisivo
 * análise das variáveis:
 	-análise de componentes principais (PCA): consegue rotacionar os eixos das classes, diminuindo o n° de dimensões de entrada (from sklearn.decomposition import PCA).
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+https://www.youtube.com/watch?v=sq28e_xZkZA&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=6&t=4s
 	
+* Avaliação de modelos supervisionados (por Classificação);
+	- Avaliação de classificadores binários: usado quando tem apenas duas classes.
+		-Matriz de confusão ou matriz de contigencia; medida de acurácia, recall ( ou cobertura, revocação ou senssibilidades), precissão
