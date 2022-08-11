@@ -1,3 +1,5 @@
+https://aria.ci.ufpb.br/ia-para-todos-material/
+
 AULA 01: https://www.youtube.com/watch?v=areBEw5-nrc&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=1
 
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -77,3 +79,6 @@ AULA 07: https://www.youtube.com/watch?v=PdsSlSK2OJ0&list=PLM8TXdmR4D2NfGVIZxXQM
 		-Multi camadas:
 		-Bibliotecas: TensorFlow, PyTorch
 playground.tensorflow.org
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+AULA 08: https://www.youtube.com/watch?v=9KQOzpM8vIM&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=8&t=48s
