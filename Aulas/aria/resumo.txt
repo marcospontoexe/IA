@@ -54,7 +54,7 @@ AULA 05: https://www.youtube.com/watch?v=FY9pxsnlch0&list=PLM8TXdmR4D2NfGVIZxXQM
 	-análise de componentes principais (PCA): consegue rotacionar os eixos das classes, diminuindo o n° de dimensões de entrada (from sklearn.decomposition import PCA).
 
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-https://www.youtube.com/watch?v=sq28e_xZkZA&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=6&t=4s
+AULA 06: https://www.youtube.com/watch?v=sq28e_xZkZA&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=6&t=4s
 	
 * Avaliação de modelos supervisionados por Classificação;
 	- Avaliação de classificadores binários: usado quando tem apenas duas classes.
@@ -69,3 +69,7 @@ https://www.youtube.com/watch?v=sq28e_xZkZA&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWp
 - Validação cruzada: dividir as amostras em várias partes, e usar subconjuntos diferentes para validação (from sklearn.model_selection import KFold). 
 - Validação cruzada extratificada: garante que as amostras de teste e treino tenham a mesma proporção de cada classe (from sklearn.model_selection import StratifieldKFold).
 
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+AULA 07: https://www.youtube.com/watch?v=PdsSlSK2OJ0&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=7&t=5s
+* RNA:
+	- Perceptron: imita o neurônio
