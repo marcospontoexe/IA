@@ -82,3 +82,5 @@ playground.tensorflow.org
 
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 AULA 08: https://www.youtube.com/watch?v=9KQOzpM8vIM&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=8&t=48s
+*RNA convulocional:Usada para tratamento de imagens.
+	-Detectar regisões na imagem e fornecer os pixels apenas dessa região para a rna (detectar aresta, canto, borda...), reduzindo a quantidade de neurônios.
