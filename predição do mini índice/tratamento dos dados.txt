@@ -1,5 +1,10 @@
-alimentar a rna com os dados referente à velas de cada hora (cada vela tem 5 dados de entrada v1, v2...), usar as velas do horario de abertura até a vela das 15h-16h (x1,x2...x40)
 classificar a vela das 16h-17h como: vela de alta, vela lateral, vela de baixa.
+
+  Alimentar a rna com os dados referente à velas de cada hora, cada vela tem 5 dados de entrada v1, v2...v5), 
+usar as sete velas (horário de abertura até a vela das 15h-16h (x1,x2...x35)). Os dados de cada vela vão para um neurônio diferente,
+totalizando sete neurônicos na camada de entrada, cada neurônio recebendo cinco valores.
+
+  A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa)
 
 tam -> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
 cor -> tam/|tam|	(+1=verde, -1=vermelho)
@@ -7,14 +12,14 @@ var -> valor máximo do horário - valor mínimo do horário  (indica o tamanho 
 ivar -> o maior var encontrado no dia  (acha a maior variação de preço das 8 velas)
 varNor -> var/ivar  (normalização de var)
 varMax -> o maior preço de negociação do dia
-tamNor -> |tam|/ivar (tamanho normalizado de cada vela)
+tamNor -> |tam|/varNor (tamanho normalizado de cada vela)
 preco -> valor de abertura/varMax (normalização do valor de abertura)
 vol -> volume  (volume de ordens daquele horário)
 ivol -> maior volume encontrado das 8h às 16h)
 volNor -> vol/ivol (volume normalizado)
 
 
------------VARIÁVEIS TRATADAS PARA SAIDA-------------------------------
+-----------VARIÁVEIS TRATADAS PARA TREINO-------------------------------
 tamMed -> (soma de todas as 8 tamNor)/8 	  (é o tamanho médio entre as 8 velas)
 volMed -> (soma de todos os 8 volNor)/8		(é o volume médio normalizado das 8 velas)
 
@@ -27,14 +32,14 @@ v5 -> volNor (volume normalizado para aquele horário,  normalizado das 8h às 1
 
 
 -----------------VARIÁVEIS DE ENTRADA------------------
-x1 a x5   dados da vela das 8h-9h
-x6 a x10  dados da vela das 9h-10h
-x11 a x15   dados da vela das 10h-11h
-x16 a x20  dados da vela das 11h-12h
-x21 a x25   dados da vela das 12h-13h
-x26 a x30  dados da vela das 13h-14h
-x31 a x35   dados da vela das 14h-15h
-x36 a x40  dados da vela das 15h-16h
+x1 a x5   dados da vela das 9h-10h
+x6 a x10  dados da vela das 10h-11h
+x11 a x15   dados da vela das 11h-12h
+x16 a x20  dados da vela das 12h-13h
+x21 a x25   dados da vela das 13h-14h
+x26 a x30  dados da vela das 14h-15h
+x31 a x35   dados da vela das 15h-16h
+
 
 ----------------VARIÁVEIS DE SAIDA--------------
 y1 -> compra
@@ -42,16 +47,16 @@ y2 -> lateral
 y3 -> venda
 
 
------------VARIÁVEIS TRATADAS PARA SAÍDA (COMPRA)-----------------
+-----------VARIÁVEIS TRATADAS PARA TREINO (COMPRA)-----------------
 VELA VERDE: v2 = +1
 VELA GRANDE: tamNor >= [ 50% * tamMed ]
 ALTO VOLUME: volNor >= [ 50% * volMed ]
 
------------VARIÁVEIS TRATADAS PARA SAÍDA (LATERAL)-----------------
-VELA PEQUENA: tamNor >= [ 50% * tamMed ]
+-----------VARIÁVEIS TRATADAS PARA TREINO (LATERAL)-----------------
+VELA PEQUENA: tamNor <= [ 50% * tamMed ]
 PEQUENO VOLUME: volNor <= [ 50% * volMed ]
 
------------VARIÁVEIS TRATADAS PARA SAÍDA (venda)-----------------
+-----------VARIÁVEIS TRATADAS PARA TREINO (venda)-----------------
 VELA VERMELHA: v2 = -1
 VELA GRANDE: tamNor >= [ 50% * tamMed ]
 ALTO VOLUME: volNor >= [ 50% * volMed ]
@@ -60,10 +65,15 @@ ALTO VOLUME: volNor >= [ 50% * volMed ]
 ------------------------VALIDAÇÃO--------------------------------
 matrix confusão.
 verificar se a quantidade de exemplos (compra, venda, lateral) tem a mesma proproção.
+verificar o correlação das variáveis, talvez cor e tamNor estejão correlacionadas
 
 
 -------------------------------SUPERVISIONADA (CLASSIFICAÇÃO)------------------
 treinar toda sexta (ultimo ano), para usar na semana seguinte
+
+
+
+
 
 
 
