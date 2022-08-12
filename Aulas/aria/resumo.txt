@@ -86,3 +86,7 @@ AULA 08: https://www.youtube.com/watch?v=9KQOzpM8vIM&list=PLM8TXdmR4D2NfGVIZxXQM
 	-Detectar regiões na imagem e fornecer os pixels apenas dessa região para a rna (detectar aresta, canto, borda...), reduzindo a quantidade de neurônios.
 	-Aplicar pooling, diminui a matriz pela metada
 técnica FGG: https://towardsdatascience.com/feature-visualization-on-convolutional-neural-networks-keras-5561a116d1af
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+AULA 09: https://www.youtube.com/watch?v=xpo7neF_mEE&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=9
+*Processamento de linguagem natural 
