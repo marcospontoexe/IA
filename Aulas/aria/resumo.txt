@@ -90,3 +90,8 @@ técnica FGG: https://towardsdatascience.com/feature-visualization-on-convolutio
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 AULA 09: https://www.youtube.com/watch?v=xpo7neF_mEE&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=9
 *Processamento de linguagem natural 
+	-Vetorização: transforma as letras em números.
+		-(Bag of words - BoW)
+		- Term-frequency inverse document - Tf-idf)
+	- Tokenização
+	- gpt-3
