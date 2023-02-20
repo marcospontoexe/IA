@@ -1,14 +1,14 @@
 classificar a vela das 16h-17h como: vela de alta, vela lateral, vela de baixa.
 
-  Alimentar a rna com os dados referente à velas de cada hora, cada vela tem 5 dados de entrada v1, v2...v5), 
-usar as sete velas (horário de abertura até a vela das 15h-16h (x1,x2...x35)). Os dados de cada vela vão para um neurônio diferente,
-totalizando sete neurônicos na camada de entrada, cada neurônio recebendo cinco valores.
+  Alimentar a rna com os dados referente às velas de cada hora, cada vela tem 5 dados de entrada v1, v2...v5), 
+usar as dez velas (horário de abertura (9h) até a vela das 18h (x1,x2...x50)) para treinar a RNA. Os dados de cada vela vão para um neurônio diferente,
+totalizando dez neurônicos na camada de entrada, cada neurônio recebendo cinco valores.
 
   A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa)
 
 tam -> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
 cor -> tam/|tam|	(+1=verde, -1=vermelho)
-var -> valor máximo do horário - valor mínimo do horário  (indica o tamanho da variação entre max e min daquela hora)
+var -> preço máximo do horário - preço mínimo do horário  (indica o tamanho da variação entre max e min daquela hora, é o tamanho do pavío)
 ivar -> o maior var encontrado no dia  (acha a maior variação de preço das 8 velas)
 varNor -> var/ivar  (normalização de var)
 varMax -> o maior preço de negociação do dia
@@ -20,25 +20,28 @@ volNor -> vol/ivol (volume normalizado)
 
 
 -----------VARIÁVEIS TRATADAS PARA TREINO-------------------------------
-tamMed -> (soma de todas as 8 tamNor)/8 	  (é o tamanho médio entre as 8 velas)
-volMed -> (soma de todos os 8 volNor)/8		(é o volume médio normalizado das 8 velas)
+tamMed -> (soma de todas as 10 tamNor)/10 	  (é o tamanho médio entre as 10 velas)
+volMed -> (soma de todos os 10 volNor)/10		(é o volume médio normalizado das 10 velas)
 
 -----------VARIÁVEIS TRATADAS PARA ENTRADA-------------------------------
 v1 -> preco 
 v2 -> cor (cor da vela)
 v3 -> tamNor (tamanho da vela para aquele horário,  normalizado das 8h às 16h)
-v4 -> varNor (variação de preço do mini índice para aquele horário, normalizado das 8h às 16h)
-v5 -> volNor (volume normalizado para aquele horário,  normalizado das 8h às 16h)
+v4 -> varNor (variação de preço do mini índice para aquele horário, normalizado das 9h às 18h)
+v5 -> volNor (volume normalizado para aquele horário,  normalizado das 9h às 18h)
 
 
 -----------------VARIÁVEIS DE ENTRADA------------------
-x1 a x5   dados da vela das 9h-10h
-x6 a x10  dados da vela das 10h-11h
-x11 a x15   dados da vela das 11h-12h
-x16 a x20  dados da vela das 12h-13h
-x21 a x25   dados da vela das 13h-14h
-x26 a x30  dados da vela das 14h-15h
-x31 a x35   dados da vela das 15h-16h
+x1 a x5   dados da vela das 9h
+x6 a x10  dados da vela das 10h
+x11 a x15   dados da vela das 11h
+x16 a x20  dados da vela das 12h
+x21 a x25   dados da vela das 13h
+x26 a x30  dados da vela das 14h
+x31 a x35   dados da vela das 15h
+x36 a x40   dados da vela das 16h
+x41 a x45   dados da vela das 17h
+x46 a x50   dados da vela das 18h
 
 
 ----------------VARIÁVEIS DE SAIDA--------------

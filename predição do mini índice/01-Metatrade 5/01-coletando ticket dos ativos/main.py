@@ -2,7 +2,7 @@ import MetaTrader5 as mt5       #importa a biblioteca
 
 mt5.initialize()        #inicia o metatrader 5
 
-ticketsTotal  = mt5.symbols_total()      # recebe a quantidade de tickets dos ativos
+ticketsTotal = mt5.symbols_total()      # recebe a quantidade de tickets dos ativos
 
 if ticketsTotal > 0:
     print(f"Quantidade total de tickets de ativos: {ticketsTotal}")
