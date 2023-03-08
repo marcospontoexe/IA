@@ -1,10 +1,12 @@
 classificar a vela das 16h-17h como: vela de alta, vela lateral, vela de baixa.
 
   Alimentar a rna com os dados referente às velas de cada hora, cada vela tem 5 dados de entrada v1, v2...v5), 
-usar as dez velas (horário de abertura (9h) até a vela das 18h (x1,x2...x50)) para treinar a RNA. Os dados de cada vela vão para um neurônio diferente,
-totalizando dez neurônicos na camada de entrada, cada neurônio recebendo cinco valores.
+usar as oito velas (horário de abertura (9h) até a vela das 16h (x1,x2...x40)) para treinar a RNA. Os dados de cada vela vão para um neurônio diferente,
+totalizando oito neurônicos na camada de entrada (é a mesma quantidade de velas das 9h às 16h), cada neurônio recebendo cinco valores.
+  Outro método possível de treinar a RNA; de forma cronológica, insirindo sabados, domingos e feriados com o mesmo valor de fechamento da ultima vela de 
+sexta-feira, e com volume zero. A fim de mostrar à RNA uma ordem cronológica. Usar tambem a vela das 17h-18h no período de inverno americano.
 
-  A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa)
+  A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa).
 
 tam -> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
 cor -> tam/|tam|	(+1=verde, -1=vermelho)
@@ -40,8 +42,7 @@ x21 a x25   dados da vela das 13h
 x26 a x30  dados da vela das 14h
 x31 a x35   dados da vela das 15h
 x36 a x40   dados da vela das 16h
-x41 a x45   dados da vela das 17h
-x46 a x50   dados da vela das 18h
+
 
 
 ----------------VARIÁVEIS DE SAIDA--------------
