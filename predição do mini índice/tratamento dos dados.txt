@@ -8,29 +8,29 @@ sexta-feira, e com volume zero. A fim de mostrar à RNA uma ordem cronológica. 
 
   A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa).
 
-tam -> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
-cor -> tam/|tam|	(+1=verde, -1=vermelho)
-var -> preço máximo do horário - preço mínimo do horário  (indica o tamanho da variação entre max e min daquela hora, é o tamanho do pavío)
-ivar -> o maior var encontrado no dia  (acha a maior variação de preço das 8 velas)
-varNor -> var/ivar  (normalização de var)
-varMax -> o maior preço de negociação do dia
-tamNor -> |tam|/varNor (tamanho normalizado de cada vela)
-preco -> valor de abertura/varMax (normalização do valor de abertura)
-vol -> volume  (volume de ordens daquele horário)
-ivol -> maior volume encontrado das 8h às 16h)
-volNor -> vol/ivol (volume normalizado)
+tam (tamanho da vela) --------------------------------> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
+cor (cor da vela) ------------------------------------> tam/|tam|	(+1=verde, -1=vermelho)
+var (variação de preço) ------------------------------> preço máximo da vela - preço mínimo da vela  (indica o tamanho da variação entre max e min daquela hora, é o tamanho do pavío + tamanho da vela)
+ivar (maior variação de preço do dia)
+varNor (normalização da variação de preço) -----------> var/ivar  
+varMax (maior preço de negociação do dia)
+tamNor (normalização do tamanho da vela) -------------> |tam|/ivar 
+preco (valor de abertura normalizado) ----------------> valor de abertura/varMax 
+vol (volume de ordens)
+ivol (maior volume encontrado no dia)
+volNor (volume normalizado) --------------------------> vol/ivol 
 
 
 -----------VARIÁVEIS TRATADAS PARA TREINO-------------------------------
-tamMed -> (soma de todas as 10 tamNor)/10 	  (é o tamanho médio entre as 10 velas)
-volMed -> (soma de todos os 10 volNor)/10		(é o volume médio normalizado das 10 velas)
+tamMed (é o tamanho médio entre as velas do dia) ------------> (soma de todas as tamNor)/(quantidade de velasdo dia) 	 
+volMed (é o volume médio normalizado entre as velas do dia) -> (soma de todos os volNor do dia)/(quantidade de velasdo dia)		
 
 -----------VARIÁVEIS TRATADAS PARA ENTRADA-------------------------------
-v1 -> preco 
+v1 -> valor de abertura normalizado
 v2 -> cor (cor da vela)
-v3 -> tamNor (tamanho da vela para aquele horário,  normalizado das 8h às 16h)
-v4 -> varNor (variação de preço do mini índice para aquele horário, normalizado das 9h às 18h)
-v5 -> volNor (volume normalizado para aquele horário,  normalizado das 9h às 18h)
+v3 -> tamNor (tamanho da vela para aquele horário,  normalizado das 9h às 16h)
+v4 -> varNor (variação de preço para aquele horário, normalizado das 9h às 16h)
+v5 -> volNor (volume normalizado para aquele horário,  normalizado das 9h às 16h)
 
 
 -----------------VARIÁVEIS DE ENTRADA------------------

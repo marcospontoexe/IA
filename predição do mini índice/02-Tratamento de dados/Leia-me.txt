@@ -1,0 +1,2 @@
+esta sessão tem a função de receber um CSV contendo os dados do WIN$ (abertura, fechamento, min, max, volume)
+e transforma em dados para alimentar a RNA.
