@@ -15,12 +15,18 @@ for indice, coluna in dfTratado.iterrows():
         hora = 9
         flag = 1
 
-    if( (coluna['<DATE>'] == temp) and (coluna['<TIME>'] == (f"{hora:>02}:00:00")) ):
-        if (hora == 17):
-            flag = 0
+    try:
+        if( (coluna['<DATE>'] == temp) and (coluna['<TIME>'] == (f"{hora:>02}:00:00")) ):
+            if (hora == 17):
+                flag = 0
+    except Exception as erro:  # mostra qual foi o erro retornado pela exceção
+        print(f"A classe do erro encontrado foi {erro.__class__}!")
+        print(f"O erro encontrado foi {erro.__cause__}!")
+
     else:
-        print(f"ERRO na data {coluna['<DATE>']}")
-        print(f"hora: {coluna['<TIME>']}")
+        print(f"ERRO na data {coluna['<DATE>']}, às {coluna['<TIME>']}")
+        exit()      # para o programa
+
 
     hora = hora + 1
 
