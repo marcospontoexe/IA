@@ -5,6 +5,30 @@ selecionarCol = ["<DATE>", "<TIME>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<V
 dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
+dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()  # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
+
+#-----verificando se o dataframe contem todos os horários dos dia (9h-17h)-------------
+flag = 0
+for indice, coluna in dfTratado.iterrows():
+    if(flag == 0):
+        temp = coluna['<DATE>']
+        hora = 9
+        flag = 1
+
+    if( (coluna['<DATE>'] == temp) and (coluna['<TIME>'] == (f"{hora:>02}:00:00")) ):
+        if (hora == 17):
+            flag = 0
+    else:
+        print(f"ERRO na data {coluna['<DATE>']}")
+        print(f"hora: {coluna['<TIME>']}")
+
+    hora = hora + 1
+
+
+
+
+#---------------------------------------------------------
+
 
 #-----Criando novas colunas-------------------------
 dfTratado['<TAMANHO>'] = np.nan
