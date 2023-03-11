@@ -8,29 +8,32 @@ sexta-feira, e com volume zero. A fim de mostrar à RNA uma ordem cronológica. 
 
   A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa).
 
+ivar (maior variação de preço do dia das 9h às 16h)
+ivarTreino (maior variação de preço do dia das 9h às 17h)
 tam (tamanho da vela) --------------------------------> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
-cor (cor da vela) ------------------------------------> tam/|tam|	(+1=verde, -1=vermelho)
+tamNor (normalização do tamanho da vela) -------------> tam/ivar 
+tamNorTreino (normalização do tamanho da vela) -------------> tam/ivarTreino 
+#cor (cor da vela) ------------------------------------> tam/|tam|	(+1=verde, -1=vermelho), talves essa variável esteja correlacionada com o tamanho da vela
 var (variação de preço) ------------------------------> preço máximo da vela - preço mínimo da vela  (indica o tamanho da variação entre max e min daquela hora, é o tamanho do pavío + tamanho da vela)
-ivar (maior variação de preço do dia)
 varNor (normalização da variação de preço) -----------> var/ivar  
 varMax (maior preço de negociação do dia)
-tamNor (normalização do tamanho da vela) -------------> |tam|/ivar 
 preco (valor de abertura normalizado) ----------------> valor de abertura/varMax 
 vol (volume de ordens)
-ivol (maior volume encontrado no dia)
+ivol (maior volume encontrado no dia, das 9h às 16h)
+vol/ivolTreino (maior volume encontrado no dia, das 9h às 17h)
 volNor (volume normalizado) --------------------------> vol/ivol 
+volNorTreino (volume normalizado) --------------------------> vol/ivolTreino 
 
 
 -----------VARIÁVEIS TRATADAS PARA TREINO-------------------------------
-tamMed (é o tamanho médio entre as velas do dia) ------------> (soma de todas as tamNor)/(quantidade de velasdo dia) 	 
+tamMed (é o tamanho médio entre as velas do dia) ------------> (soma de todas as tamNor)/(quantidade de velas do dia) 	 
 volMed (é o volume médio normalizado entre as velas do dia) -> (soma de todos os volNor do dia)/(quantidade de velasdo dia)		
 
 -----------VARIÁVEIS TRATADAS PARA ENTRADA-------------------------------
 v1 -> valor de abertura normalizado
-v2 -> cor (cor da vela)
-v3 -> tamNor (tamanho da vela para aquele horário,  normalizado das 9h às 16h)
-v4 -> varNor (variação de preço para aquele horário, normalizado das 9h às 16h)
-v5 -> volNor (volume normalizado para aquele horário,  normalizado das 9h às 16h)
+v2 -> tamNor (tamanho da vela para aquele horário,  normalizado das 9h às 16h)
+v3 -> varNor (variação de preço para aquele horário, normalizado das 9h às 16h)
+v4 -> volNor (volume normalizado para aquele horário,  normalizado das 9h às 16h)
 
 
 -----------------VARIÁVEIS DE ENTRADA------------------
@@ -53,17 +56,17 @@ y3 -> venda
 
 -----------VARIÁVEIS TRATADAS PARA TREINO (COMPRA)-----------------
 VELA VERDE: v2 = +1
-VELA GRANDE: tamNor >= [ 50% * tamMed ]
-ALTO VOLUME: volNor >= [ 50% * volMed ]
+VELA GRANDE: tamNorTreino >= [ 50% * tamMed ]
+ALTO VOLUME: volNorTreino >= [ 50% * volMed ]
 
 -----------VARIÁVEIS TRATADAS PARA TREINO (LATERAL)-----------------
-VELA PEQUENA: tamNor <= [ 50% * tamMed ]
+VELA PEQUENA: tamNorTreino<= [ 50% * tamMed ]
 PEQUENO VOLUME: volNor <= [ 50% * volMed ]
 
 -----------VARIÁVEIS TRATADAS PARA TREINO (venda)-----------------
 VELA VERMELHA: v2 = -1
-VELA GRANDE: tamNor >= [ 50% * tamMed ]
-ALTO VOLUME: volNor >= [ 50% * volMed ]
+VELA GRANDE: tamNorTreino>= [ 50% * tamMed ]
+ALTO VOLUME: volNorTreino>= [ 50% * volMed ]
 
 
 ------------------------VALIDAÇÃO--------------------------------
