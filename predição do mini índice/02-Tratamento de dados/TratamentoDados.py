@@ -5,7 +5,9 @@ selecionarCol = ["<DATE>", "<TIME>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<V
 dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
-dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()  # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
+#dfTratado.to_csv("dfTratado.csv")      # salva como csv
+
+#dfTratado.drop([400,401,402,403,404], inplace=True)     #e xcluindo as linhas dos dias incompletos (9-17h)
 
 #-----verificando se o dataframe contem todos os horários dos dia (9h-17h)-------------
 flag = 0
@@ -14,26 +16,24 @@ for indice, coluna in dfTratado.iterrows():
         temp = coluna['<DATE>']
         hora = 9
         flag = 1
+        lista=[]
 
-    try:
-        if( (coluna['<DATE>'] == temp) and (coluna['<TIME>'] == (f"{hora:>02}:00:00")) ):
-            if (hora == 17):
-                flag = 0
-    except Exception as erro:  # mostra qual foi o erro retornado pela exceção
-        print(f"A classe do erro encontrado foi {erro.__class__}!")
-        print(f"O erro encontrado foi {erro.__cause__}!")
-
+    if( (coluna['<DATE>'] == temp) and (coluna['<TIME>'] == (f"{hora:>02}:00:00")) ):
+        if (hora == 17):
+            flag = 0
     else:
-        print(f"ERRO na data {coluna['<DATE>']}, às {coluna['<TIME>']}")
-        exit()      # para o programa
+        lista.append(int((dfTratado.loc[[indice]].index).values))
+        if (dfTratado.loc[[indice],['<DATE>']] != temp):
+            print(f"ERRO nasseguintes linhas;\n{dfTratado.loc[lista]}")
+            flag = 0
+        #exit()      # para o programa
 
 
     hora = hora + 1
-
-
-
-
+dfTratado.drop([400,401,402,403,404], inplace=True)     #e xcluindo as linhas dos dias incompletos (9-17h)
 #---------------------------------------------------------
+
+
 
 
 #-----Criando novas colunas-------------------------
