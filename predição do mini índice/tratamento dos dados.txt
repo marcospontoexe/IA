@@ -8,21 +8,21 @@ sexta-feira, e com volume zero. A fim de mostrar à RNA uma ordem cronológica. 
 
   A camada de saida tem três neurônicos (vela de alta, vela lateral, vela de baixa).
 
-ivar (maior variação de preço do dia das 9h às 16h)
-ivarTreino (maior variação de preço do dia das 9h às 17h)
-tam (tamanho da vela) --------------------------------> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
-tamNor (normalização do tamanho da vela) -------------> tam/ivar 
-tamNorTreino (normalização do tamanho da vela) -------------> tam/ivarTreino 
-#cor (cor da vela) ------------------------------------> tam/|tam|	(+1=verde, -1=vermelho), talves essa variável esteja correlacionada com o tamanho da vela
-var (variação de preço) ------------------------------> preço máximo da vela - preço mínimo da vela  (indica o tamanho da variação entre max e min daquela hora, é o tamanho do pavío + tamanho da vela)
-varNor (normalização da variação de preço) -----------> var/ivar  
-varMax (maior preço de negociação do dia)
-preco (valor de abertura normalizado) ----------------> valor de abertura/varMax 
-vol (volume de ordens)
-ivol (maior volume encontrado no dia, das 9h às 16h)
-vol/ivolTreino (maior volume encontrado no dia, das 9h às 17h)
-volNor (volume normalizado) --------------------------> vol/ivol 
-volNorTreino (volume normalizado) --------------------------> vol/ivolTreino 
+*ivar (maior variação de preço do dia das 9h às 16h)
+*ivarTreino (maior variação de preço do dia das 9h às 17h)
+*tam (tamanho da vela) --------------------------------> valor de fechamento - valor de abertura (indica o tamanho da vela, valor positivo=verde, valor negativo=vermelho)
+*tamNor (normalização do tamanho da vela) -------------> tam/ivar 
+*tamNorTreino (normalização do tamanho da vela) -------------> tam/ivarTreino 
+*#cor (cor da vela) ------------------------------------> tam/|tam|	(+1=verde, -1=vermelho), talves essa variável esteja correlacionada com o tamanho da vela
+*var (variação de preço) ------------------------------> preço máximo da vela - preço mínimo da vela  (indica o tamanho da variação entre max e min daquela hora, é o tamanho do pavío + tamanho da vela)
+*varNor (normalização da variação de preço) -----------> var/ivar  
+*varMax (maior preço de negociação do dia)
+*preco (valor de abertura normalizado) ----------------> valor de abertura/varMax 
+*vol (volume de ordens)
+*ivol (maior volume encontrado no dia, das 9h às 16h)
+*vol/ivolTreino (maior volume encontrado no dia, das 9h às 17h)
+*volNor (volume normalizado) --------------------------> vol/ivol 
+*volNorTreino (volume normalizado) --------------------------> vol/ivolTreino 
 
 
 -----------VARIÁVEIS TRATADAS PARA TREINO-------------------------------
