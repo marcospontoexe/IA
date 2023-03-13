@@ -62,7 +62,9 @@ for indice, coluna in dfTratado.iterrows():
         dfTratado.loc[indice:indice+8, ['<PREÇO>']] = ((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) / varMax  # preco (valor de abertura normalizado)
         dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = ((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values) / ivol  # volNor (volume normalizado)
 
-        dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = (dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]]).mean()
+        #dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = (dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]]).mean()
+        print((dfTratado.loc[indice:indice + 7, ["<TAMANHO NORMALIZADO>"]]).mean())
+
         #print(f"TIME: {dfBruto.loc[indice:indice+7, ['<TIME>']]}")
         #print(f"ivol: {ivol}")
 
