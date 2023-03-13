@@ -36,12 +36,14 @@ for indice, coluna in dfTratado.iterrows():     # for para percorrer todas as li
 #dfTratado.to_csv("dfTratado.csv", index=False)      # salva como csv, sem os índices
 
 #-----Criando novas colunas-------------------------
-dfTratado['<TAMANHO>'] = np.nan
-dfTratado['<TAMANHO NORMALIZADO>'] = np.nan
-dfTratado['<VARIAÇÃO DO PREÇO>'] = np.nan
-dfTratado['<VARIAÇÃO DO PREÇO NORMALIZADO>'] = np.nan
-dfTratado['<PREÇO>'] = np.nan
-dfTratado['<VOLUME NORMALIZADO>'] = np.nan
+dfTratado['<TAMANHO>'] = np.nan                                 # tam (tamanho da vela)
+dfTratado['<TAMANHO NORMALIZADO>'] = np.nan                     # tamNor (normalização do tamanho da vela)
+dfTratado['<VARIAÇÃO DO PREÇO>'] = np.nan                       # var (variação de preço)
+dfTratado['<VARIAÇÃO DO PREÇO NORMALIZADO>'] = np.nan           # varNor (normalização da variação de preço)
+dfTratado['<PREÇO>'] = np.nan                                   # preco (valor de abertura normalizado)
+dfTratado['<VOLUME NORMALIZADO>'] = np.nan                      # volNor (volume normalizado)
+dfTratado['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>'] = np.nan     # tamMed (é o tamanho médio entre as velas do dia)
+dfTratado['<VOLUME MÉDIO NORMALIZADO DAS VELAS>'] = np.nan      # volMed (é o volume médio normalizado entre as velas do dia)
 #-----------------------------------------------
 
 
@@ -60,6 +62,7 @@ for indice, coluna in dfTratado.iterrows():
         dfTratado.loc[indice:indice+8, ['<PREÇO>']] = ((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) / varMax  # preco (valor de abertura normalizado)
         dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = ((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values) / ivol  # volNor (volume normalizado)
 
+        dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = (dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]]).mean()
         #print(f"TIME: {dfBruto.loc[indice:indice+7, ['<TIME>']]}")
         #print(f"ivol: {ivol}")
 
@@ -67,11 +70,6 @@ for indice, coluna in dfTratado.iterrows():
     #close = int(((dfBruto.loc[[indice],["<CLOSE>"]])).values)   # recebe o valor em 'int' do fechamento da vela
     #high = int(((dfBruto.loc[[indice],["<HIGH>"]])).values)   # recebe o valor em 'int' do maior preço de negociação da vela
     #low = int(((dfBruto.loc[[indice],["<LOW>"]])).values)   # recebe o valor em "int" do menor preço de negociação da vela
-
-
-
-
-
 #----------------------------------------------------
 
 #print(dfTratado.loc[:,["<DATE>", "<TIME>", "<PREÇO>"]].head(50))
