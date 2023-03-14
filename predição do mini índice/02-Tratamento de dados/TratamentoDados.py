@@ -50,7 +50,7 @@ dfTratado['<VOLUME MÉDIO NORMALIZADO DAS VELAS>'] = np.nan      # volMed (é o 
 #----------------Tratando o dataframe------------------
 dfTratado['<TAMANHO>'] = dfBruto['<CLOSE>'] - dfBruto['<OPEN>']       # tam (tamanho da vela)
 dfTratado['<VARIAÇÃO DO PREÇO>'] = dfBruto['<HIGH>'] - dfBruto['<LOW>']  # var (variação de preço)
-
+somaTamanho = 0
 for indice, coluna in dfTratado.iterrows():
     if (coluna["<TIME>"] == "09:00:00"):    # para as velas das 9h às 16h
         varMax = int(dfBruto.loc[indice:indice+7, ["<HIGH>"]].max().values)    # maior preço de negociação no dia (das 9h às 16h)
@@ -62,8 +62,9 @@ for indice, coluna in dfTratado.iterrows():
         dfTratado.loc[indice:indice+8, ['<PREÇO>']] = ((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) / varMax  # preco (valor de abertura normalizado)
         dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = ((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values) / ivol  # volNor (volume normalizado)
 
-        #dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = (dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]]).mean()
-        print((dfTratado.loc[indice:indice + 7, ["<TAMANHO NORMALIZADO>"]]).mean())
+        somaTamanho = abs(dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]].values).sum()   # soma o valor absoluta das 8h às 16h
+        dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = somaTamanho / 8
+
 
         #print(f"TIME: {dfBruto.loc[indice:indice+7, ['<TIME>']]}")
         #print(f"ivol: {ivol}")
