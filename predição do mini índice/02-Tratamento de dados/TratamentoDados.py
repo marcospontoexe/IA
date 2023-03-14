@@ -44,6 +44,7 @@ dfTratado['<PREÇO>'] = np.nan                                   # preco (valor 
 dfTratado['<VOLUME NORMALIZADO>'] = np.nan                      # volNor (volume normalizado)
 dfTratado['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>'] = np.nan     # tamMed (é o tamanho médio entre as velas do dia)
 dfTratado['<VOLUME MÉDIO NORMALIZADO DAS VELAS>'] = np.nan      # volMed (é o volume médio normalizado entre as velas do dia)
+dfTratado['<OPERAÇÃO>'] = np.nan                                # Compra, Venda ou lateral
 #-----------------------------------------------
 
 
@@ -62,17 +63,25 @@ for indice, coluna in dfTratado.iterrows():
         dfTratado.loc[indice:indice+8, ['<PREÇO>']] = ((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) / varMax  # preco (valor de abertura normalizado)
         dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = ((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values) / ivol  # volNor (volume normalizado)
 
-        somaTamanho = abs(dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]].values).sum()   # soma o valor absoluta das 8h às 16h
-        dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = somaTamanho / 8
+        somaTamanho = abs(dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]].values).sum()   # soma o valor absoluto do tamanho normalizado das velas das 8h às 16h
+        somaVolume = abs(dfTratado.loc[indice:indice+7, ["<VOLUME NORMALIZADO>"]].values).sum()     # soma o valor absoluto do volume normalizado das velas das 8h às 16h
+        dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = somaTamanho / 8      # tamMed (é o tamanho médio entre as velas do dia)
+        dfTratado.loc[[indice+8], ['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']] = somaVolume / 8        # volMed (é o volume médio normalizado entre as velas do dia)
 
 
-        #print(f"TIME: {dfBruto.loc[indice:indice+7, ['<TIME>']]}")
-        #print(f"ivol: {ivol}")
+        #VARIÁVEIS TRATADAS PARA TREINO (COMPRA)
+        if( (coluna["<TAMANHO>"] > 1) and ((float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+            dfTratado.loc[[indice+8], ['<SAIDA>']] = 'COMPRA'
+
+        # VARIÁVEIS TRATADAS PARA TREINO (venda)
+        elif( (coluna["<TAMANHO>"] < 1) and ((float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values)) <= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) <= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+            dfTratado.loc[[indice+8], ['<SAIDA>']] = 'VENDA'
+
+        # VARIÁVEIS TRATADAS PARA TREINO (LATERAL)
+        else:
+            dfTratado.loc[[indice+8],['<SAIDA>']] = 'LATERAL'
 
 
-    #close = int(((dfBruto.loc[[indice],["<CLOSE>"]])).values)   # recebe o valor em 'int' do fechamento da vela
-    #high = int(((dfBruto.loc[[indice],["<HIGH>"]])).values)   # recebe o valor em 'int' do maior preço de negociação da vela
-    #low = int(((dfBruto.loc[[indice],["<LOW>"]])).values)   # recebe o valor em "int" do menor preço de negociação da vela
 #----------------------------------------------------
 
 #print(dfTratado.loc[:,["<DATE>", "<TIME>", "<PREÇO>"]].head(50))
