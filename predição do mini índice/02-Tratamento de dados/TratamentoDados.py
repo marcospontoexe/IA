@@ -83,7 +83,7 @@ for indice, coluna in dfTratado.iterrows():
 #----------------------------------------------------
 
 
-dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
+#dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
 
 '''
 #-----Gerando o dataframe para a RNA---------
