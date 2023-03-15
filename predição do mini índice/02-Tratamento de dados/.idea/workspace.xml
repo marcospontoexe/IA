@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d2901b4-e04f-4869-9594-e24324af0269" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/TratamentoDados(sem_volume).py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TratamentoDados.py" beforeDir="false" afterPath="$PROJECT_DIR$/TratamentoDados.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dfTratado.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dfTratadoExcel.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dfTratado.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/dfTratado.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,17 +28,26 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2MpPIxYP5RpTE04Jln6LdEzJP1G" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/marcos.santana/Documents/GitHub/IA/predição do mini índice/02-Tratamento de dados",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\marcos.santana\Documents\GitHub\IA\predição do mini índice\02-Tratamento de dados" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
