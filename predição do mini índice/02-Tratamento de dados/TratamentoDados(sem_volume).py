@@ -5,7 +5,8 @@ selecionarCol = ["<DATE>", "<TIME>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<V
 dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
-
+dfTratado.drop([7], inplace=True)
+print(dfTratado.head(10))
 #-----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
 flag = 0
 for indice, coluna in dfTratado.iterrows():     # for para percorrer todas as linhas do datafram
@@ -19,8 +20,10 @@ for indice, coluna in dfTratado.iterrows():     # for para percorrer todas as li
             flag = 0
     else:               # quando falta alguma vela no dia verificado
         lista.append(int((dfTratado.loc[[indice]].index).values))   # adiciona qual foi o índice onde ocorreu o erro
+        print(f"tamanao: {len(lista)}")
         if (((coluna['<TIME>']) == "09:00:00") and (coluna['<DATE>'] != temp) ):    # quando muda o dia e é a vela das 9h
-            lista.pop()         # apaga o último índice da lista, pois se refere à vela das 9h do dia seguinte
+            if(len(lista) > 1):
+                lista.pop()         # apaga o último índice da lista, pois se refere à vela das 9h do dia seguinte
             print(f"ERRO nasseguintes linhas;\n{dfTratado.loc[lista]}")             # mostra o dia, o horário de cada vela, e o índice no dataframe onde está inconpleto
             print('--------------------------------------------')
             print(f"AS VELAS DAS {str((dfTratado.loc[lista,['<TIME>']]).values)} HORAS\nDO DIA {temp}\nFORAM APAGADOS DO DATAFRAME!")   # mostra quias velas foram apagadas do dataframe
@@ -82,15 +85,19 @@ for indice, coluna in dfTratado.iterrows():
             dfTratado.loc[[indice+8],['<OPERAÇÃO>']] = 'LATERAL'
 #----------------------------------------------------
 
+'''#------mostra quantas saidas foram geradas------
 filtroCompra = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE COMPRAS: {sum(filtroCompra * 1)}")          # mostra quantas linhas que contém o valor "John"
 filtroVenda = dfTratado['<OPERAÇÃO>'] == 'VENDA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE VENDA: {sum(filtroVenda * 1)}")          # mostra quantas linhas que contém o valor "John"
 filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
-
+#---------------------------------------------
 dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
-
+'''
+#---------------- excluindo as colunas inúteis----------
+dfTratado.drop("VIVO", axis=1, inplace=True)    # o 'inplace=True' retorna a alteração para o próprio dataframe
+#--------------------------------------------------------
 '''
 #-----Gerando o dataframe para a RNA---------
 linha = 0
