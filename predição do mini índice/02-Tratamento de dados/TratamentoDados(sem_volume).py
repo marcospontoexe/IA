@@ -70,11 +70,11 @@ for indice, coluna in dfTratado.iterrows():
 
 
         #VARIÁVEIS TRATADAS PARA TREINO (COMPRA)
-        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.1)) ):
+        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values))) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'COMPRA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (venda)
-        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.1)) ):
+        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values))) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'VENDA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (LATERAL)
@@ -89,7 +89,7 @@ print(f"QUANTIDADE DE VENDA: {sum(filtroVenda * 1)}")          # mostra quantas 
 filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
 
-#dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
+dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
 
 '''
 #-----Gerando o dataframe para a RNA---------
