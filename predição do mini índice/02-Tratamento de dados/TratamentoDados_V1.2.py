@@ -85,36 +85,52 @@ dfLimpo = dfTratado[colunasDf]
 
 
 #-----Gerando o dataframe para a RNA---------
-'''dfRna = pd.DataFrame({
-    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],
-    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],
-    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],
-    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0]
-})'''
-#for i in range(0,8):
-dfRna = dfLimpo.loc[0]
-dfRna.drop(["<TIME>","<OPERAÇÃO>"], inplace=True)    # o 'inplace=True' retorna a alteração para o próprio dataframe
-dfRna.loc[1] = dfLimpo.loc[1]
+dfRna = pd.DataFrame({          # cria um dataframe com apenas uma linha
+    'X1':[1],'X2':[1],'X3':[1],'X4':[1],'X5':[1],'X6':[1],'X7':[1],'X8':[1],'X9':[1],'X10':[1],
+    'X11':[1],'X12':[1],'X13':[1],'X14':[1],'X15':[1],'X16':[1],'X17':[1],'X18':[1],'X19':[1],'X20':[1],
+    'X21':[1],'X22':[1],'X23':[1],'X24':[1],'X25':[1],'X26':[1],'X27':[1],'X28':[1],'X29':[1],'X30':[1],
+    'X31':[1],'X32':[1],'X33':[1],'X34':[1],'X35':[1],'X36':[1],'Y1':[1],'Y2':[1],'Y3':[1]
+})
 
-'''print(dfRna)
-new = 0
-contLinha = 0
+contColuna = 0  # iteração para incluir colunas no dataframe 'dfRNA'
+contLinha = 0   # iteração para incluir linhas no dataframe 'dfRNA'
 for linha, dado in dfLimpo.iterrows():
-    listaLinha = (dado[1:].values)  # recebe uma lista em float com os valores da linha atual do dataframe
-    if(new == 0):
-        if (dado["<TIME>"] != "17:00:00"):
-            for i in range(0,4):
-                dfRna.loc[linha,[contLinha]] = listaLinha[i]
-                contLinha = contLinha + 1
-        else:
-            for i in range(0,5):
-                dfRna.loc[[linha],[contLinha]] = listaLinha[i]
-'''
+    listaLinha = (dado[1:].values)  # recebe uma lista em float com os valores da linha atual do dataframe (sem a coluna '<TIME>')
+    if (dado["<TIME>"] != "17:00:00"):  # para horário das 9h às 16h a coluna '<OPERAÇÃO>' não tem nenhum valor
+        for i in range(0,4):
+            contColuna = contColuna + 1
+            dfRna.loc[contLinha,[f"X{contColuna}"]] = listaLinha[i]
 
+    else:           # para horário das 17h a coluna '<OPERAÇÃO>' deve ser incluida no datafrme 'dfRna'
+        for i in range(0,4):
+            contColuna = contColuna + 1
+            dfRna.loc[[contLinha],[f"X{contColuna}"]] = listaLinha[i]
+
+        if(listaLinha[4] == "COMPRA"):
+            dfRna.loc[[contLinha], ["Y1"]] = 1
+            dfRna.loc[[contLinha], ["Y2"]] = 0
+            dfRna.loc[[contLinha], ["Y3"]] = 0
+        elif(listaLinha[4] == "LATERAL"):
+            dfRna.loc[[contLinha], ["Y1"]] = 0
+            dfRna.loc[[contLinha], ["Y2"]] = 1
+            dfRna.loc[[contLinha], ["Y3"]] = 0
+        elif(listaLinha[4] == "VENDA"):
+            dfRna.loc[[contLinha], ["Y1"]] = 0
+            dfRna.loc[[contLinha], ["Y2"]] = 0
+            dfRna.loc[[contLinha], ["Y3"]] = 1
+        else:
+            print(f'ERRO: {listaLinha[4]}')
+
+        contColuna = 0
+        contLinha = contLinha + 1
 
 print((dfRna))
+#dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
+dfRna.to_csv("dfRna.csv", index=False)      # salva sem os índices
 
-dfRna.to_excel("dfRna.xlsx")      # salva como csv, sem os índices
+
+
+
 
 
 
