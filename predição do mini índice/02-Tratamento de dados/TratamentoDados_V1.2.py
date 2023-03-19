@@ -5,36 +5,18 @@ selecionarCol = ["<DATE>", "<TIME>", "<OPEN>", "<HIGH>", "<LOW>", "<CLOSE>", "<V
 dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
-dfTratado.drop([7], inplace=True)
-print(dfTratado.head(10))
-#-----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
-flag = 0
-for indice, coluna in dfTratado.iterrows():     # for para percorrer todas as linhas do datafram
-    if(flag == 0):                              # apenas na primeira vela do dia
-        temp = coluna['<DATE>']                 # recebe a data da 1° linha
-        hora = 9
-        flag = 1
-        lista=[]
-    if( (coluna['<DATE>'] == temp) and (coluna['<TIME>'] == (f"{hora:>02}:00:00")) ):   # verifica se o dia "<DATE>" contem todas as velas (das 9h às 17h)
-        if (hora == 17):
-            flag = 0
-    else:               # quando falta alguma vela no dia verificado
-        lista.append(int((dfTratado.loc[[indice]].index).values))   # adiciona qual foi o índice onde ocorreu o erro
-        print(f"tamanao: {len(lista)}")
-        if (((coluna['<TIME>']) == "09:00:00") and (coluna['<DATE>'] != temp) ):    # quando muda o dia e é a vela das 9h
-            if(len(lista) > 1):
-                lista.pop()         # apaga o último índice da lista, pois se refere à vela das 9h do dia seguinte
-            print(f"ERRO nasseguintes linhas;\n{dfTratado.loc[lista]}")             # mostra o dia, o horário de cada vela, e o índice no dataframe onde está inconpleto
-            print('--------------------------------------------')
-            print(f"AS VELAS DAS {str((dfTratado.loc[lista,['<TIME>']]).values)} HORAS\nDO DIA {temp}\nFORAM APAGADOS DO DATAFRAME!")   # mostra quias velas foram apagadas do dataframe
-            print('--------------------------------------------')
-            dfTratado.drop(lista, inplace=True)  # exclui as linhas dos dias incompletos (9-17h)
-            temp = coluna['<DATE>']                             # recebe a data atual a ser verificada
-            hora = 9
-            lista = []
-        #exit()      # para o programa
-    hora = hora + 1
-#---------------------------------------------------------
+
+# -----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
+condicao = dfTratado['<DATE>'].value_counts() < 9                       # TRUE para dias que tem menos de 8 velas (das 9h às 17h)
+datas = ((dfTratado['<DATE>'].value_counts()[condicao]).index).values   # datas dos dias incompletos
+print('As seguintes datas estão incompletas e foram apagadas:')
+for i in range(0, len(datas)):                                          # apagando o dia incompleto
+    print(f"{datas[i]}")                                                # mostra a data excluida do dftratado
+    datasIndice = ((dfTratado['<DATE>']) == datas[i])                   # recebe um dataframe com 'True' nas linhas do dia comparado com a data
+    lista = dfTratado[datasIndice]                         # recebe um dataframe com as linhas do dia comparado
+    listaIndice = lista.index  # recebe uma lista com os índices do dataframe 'lista'
+    dfTratado.drop(listaIndice, inplace=True)        # apaga as linhas dos dias incompletos
+# ---------------------------------------------------------
 
 #dfTratado.to_csv("dfTratado.csv", index=False)      # salva como csv, sem os índices
 
@@ -93,29 +75,47 @@ print(f"QUANTIDADE DE VENDA: {sum(filtroVenda * 1)}")          # mostra quantas 
 filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
 #---------------------------------------------
-dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
 '''
-#---------------- excluindo as colunas inúteis----------
-dfTratado.drop("VIVO", axis=1, inplace=True)    # o 'inplace=True' retorna a alteração para o próprio dataframe
-#--------------------------------------------------------
-'''
+#dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
+#-----Novo dataframe apenas com as linha últeis---------------------
+colunasDf = ["<TIME>", "<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>", "<OPERAÇÃO>"] # seleciona quais colunas o dataframe deve possuir
+dfLimpo = dfTratado[colunasDf]
+#dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices
+#--------------------------------------------------------------------
+
+
 #-----Gerando o dataframe para a RNA---------
-linha = 0
-for indice, coluna in dfBruto.iterrows():
-    if (coluna["<TIME>"] == "09:00:00"):    # faz tratamento de dados apenas nas velas das 9h até 16h
-        for i in range (0, 8):
-            dfTratado.loc[[linha], ['<MAIOR VARIAÇÃO DO PREÇO>']] = 1       # ivar (maior variação de preço do dia)
-            dfTratado.loc[[linha], ['<TAMANHO>']] = 2                       # tam (tamanho da vela)
-            dfTratado.loc[[linha], ['<TAMANHO_NORMALIZADO>']] = 3           # tamNor (normalização do tamanho da vela)
-            dfTratado.loc[[linha], ['<VARIAÇÃO DO PREÇO>']] = 4             # var (variação de preço)
-            dfTratado.loc[[linha], ['<VARIAÇÃO DO PREÇO NORMALIZADO>']] = 5 #varNor (normalização da variação de preço)
-            dfTratado.loc[[linha], ['<MAIOR PREÇO>']] = 6                   # varMax (maior preço de negociação do dia)
-            dfTratado.loc[[linha], ['<PREÇO>']] = 7                         # preco (valor de abertura normalizado)
-            dfTratado.loc[[linha], ['<VOLUME>']] = 8                        # vol (volume de ordens)
-            dfTratado.loc[[linha], ['<MAIOR VOLUME>']] = 9                  # ivol (maior volume encontrado no dia)
-            dfTratado.loc[[linha], ['<VOLUME NORMALIZADO>']] = 10           # volNor (volume normalizado)
-            linha = linha+1
-print(f"{dfTratado}")
+'''dfRna = pd.DataFrame({
+    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],
+    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],
+    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],
+    'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0],'X':[0]
+})'''
+#for i in range(0,8):
+dfRna = dfLimpo.loc[0]
+dfRna.drop(["<TIME>","<OPERAÇÃO>"], inplace=True)    # o 'inplace=True' retorna a alteração para o próprio dataframe
+dfRna.loc[1] = dfLimpo.loc[1]
+
+'''print(dfRna)
+new = 0
+contLinha = 0
+for linha, dado in dfLimpo.iterrows():
+    listaLinha = (dado[1:].values)  # recebe uma lista em float com os valores da linha atual do dataframe
+    if(new == 0):
+        if (dado["<TIME>"] != "17:00:00"):
+            for i in range(0,4):
+                dfRna.loc[linha,[contLinha]] = listaLinha[i]
+                contLinha = contLinha + 1
+        else:
+            for i in range(0,5):
+                dfRna.loc[[linha],[contLinha]] = listaLinha[i]
 '''
+
+
+print((dfRna))
+
+dfRna.to_excel("dfRna.xlsx")      # salva como csv, sem os índices
+
+
 
 
