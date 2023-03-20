@@ -1,3 +1,9 @@
+import pandas as pd
+
+'''#import pybrain3
+import numpy as np
+
+import matplotlib.pyplot as plt
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers import BackpropTrainer
@@ -5,33 +11,30 @@ from pybrain.structure.modules import SoftmaxLayer, LSTMLayer
 from pybrain.structure.modules import SigmoidLayer
 from pybrain.structure.modules import TanhLayer
 from pybrain.structure.modules import BiasUnit
-from pybrain.tools.customxml import NetworkWriter	#necessário pybrain v0.3.3
+from pybrain.tools.customxml import NetworkWriter	#necessário pybrain v0.3.3'''
 
-#import pybrain3
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 
+'''
 seed = 176
 np.random.seed(0) 
 np.random.permutation(seed)
 #np.random.seed(seed)
-
+'''
 nInputs = 36
 hidden_layers = 9
 nOutputs = 3
 #importacao dos dados para aprendizado
 df = pd.read_csv('dfRna.csv', header=None)
-
+tamanhoTreino = int((df.shape[0])*0.8)		# define um tamanho de 80% do banco de dados para usar como treino (20% como validação)
+dfTreino = df.loc[:tamanhoTreino].copy		# dataframe para treinar a rna
+dfValidacao	= df.loc[(tamanhoTreino+1):].copy	# dataframe para validação da rna
 X_train = df.iloc[:, 0:nInputs].values
 y_train = df.iloc[:, nInputs:(nInputs+nOutputs)].values
-
-tamanhoTreino = int((dfRna.shape[0])*0.8)
-
-#normalizacao do csv de treino
-#X_train_norm = X_train/np.max(np.abs(X_train))
-#pd.set_option('display.max_columns', None)
-#print(X_train_norm)
+dfTreino.to_csv("dfTreino.csv")      # salva como csv, sem os índices
+dfValidacao.to_csv("dfValidacao.csv")      # salva como csv, sem os índices
+X_train.to_csv("X_train.csv")      # salva como csv, sem os índices
+y_train.to_csv("y_train.csv")      # salva como csv, sem os índices
+'''
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
@@ -96,6 +99,7 @@ plt.show()
 #class pybrain.tools.neuralnets.saveNetwork('teste.csv')
 NetworkWriter.writeToFile(rede, 'model.xml')
 #https://stackoverflow.com/questions/12050460/neural-network-training-with-pybrain-wont-converge
+'''
 
 '''
 for i in range(1, 60):
