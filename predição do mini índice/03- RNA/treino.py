@@ -30,11 +30,8 @@ dfTreino = df.loc[:tamanhoTreino].copy		# dataframe para treinar a rna
 dfValidacao	= df.loc[(tamanhoTreino+1):].copy	# dataframe para validação da rna
 X_train = df.iloc[:, 0:nInputs].values
 y_train = df.iloc[:, nInputs:(nInputs+nOutputs)].values
-dfTreino.to_csv("dfTreino.csv")      # salva como csv, sem os índices
-dfValidacao.to_csv("dfValidacao.csv")      # salva como csv, sem os índices
-X_train.to_csv("X_train.csv")      # salva como csv, sem os índices
-y_train.to_csv("y_train.csv")      # salva como csv, sem os índices
-'''
+
+
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
@@ -96,7 +93,8 @@ plt.plot(learning_rate)
 plt.show()
 
 # gera um arquivo XML
-#class pybrain.tools.neuralnets.saveNetwork('teste.csv')
+print(rede)
+'''#class pybrain.tools.neuralnets.saveNetwork('teste.csv')
 NetworkWriter.writeToFile(rede, 'model.xml')
 #https://stackoverflow.com/questions/12050460/neural-network-training-with-pybrain-wont-converge
 '''
