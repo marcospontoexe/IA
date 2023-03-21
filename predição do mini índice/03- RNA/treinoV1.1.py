@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 #import pybrain   # pip install https://github.com/pybrain/pybrain/archive/0.3.3.zip
 
 import matplotlib.pyplot as plt
-from pybrain.tools.shortcuts import buildNetwork
-from pybrain.datasets import SupervisedDataSet
-from pybrain.supervised.trainers import BackpropTrainer
-from pybrain.structure.modules import SoftmaxLayer, LSTMLayer
+from pybrain.tools.shortcuts import buildNetwork	# usado para construir a estrutura de uma rna
+from pybrain.datasets import SupervisedDataSet		# método de aprendizagem (supervisionado)
+from pybrain.supervised.trainers import BackpropTrainer	#método de treiamento supervisionado
+from pybrain.structure.modules import SoftmaxLayer, LSTMLayer	# funções de ativação
 from pybrain.structure.modules import SigmoidLayer
 from pybrain.structure.modules import TanhLayer
-from pybrain.structure.modules import BiasUnit
-from pybrain.tools.customxml import NetworkWriter	#necessário pybrain v0.3.3'''
+from pybrain.structure.modules import BiasUnit		# bias
+from pybrain.tools.customxml import NetworkWriter	# para salvar em xml
 
 seed = 176
 np.random.seed(0)
@@ -25,6 +25,7 @@ nOutputs = 3
 #importacao dos dados para aprendizado
 df = pd.read_csv('dfRna.csv', header=None)
 tamanhoTreino = int((df.shape[0])*0.8)		# define um tamanho de 80% do banco de dados para usar como treino (20% como validação)
+
 dfTreino = df.loc[1:tamanhoTreino].copy()		# dataframe para treinar a rna
 dfValidacao	= df.loc[(tamanhoTreino+1):].copy()	# dataframe para validação da rna
 X_train = dfTreino.iloc[:, 0:nInputs].values    # array com valores de entrada da rna
@@ -33,10 +34,25 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, outclass=SoftmaxLayer)
+rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
+'''When building networks with the buildNetwork shortcut, the parts are named
+automatically:
+>>> net[’in’]
+<LinearLayer ’in’>
+>>> net[’hidden0’]
+<SigmoidLayer ’hidden0’>
+>>> net[’out’]
+<LinearLayer ’out’>
+OBS: o atalho buildNetwork permite topologia apenas feedforward
+'''
+print(f"RNA: \n{rede}")		# mostra a configuranção da RNA
+print(f"pesos sinápticos da RNA: \n{rede.params}")		# mostra o valor dos pesos sinápticos da RNA
+
+
 base = SupervisedDataSet(nInputs, nOutputs)
 
-# insere os dados na rede neuraloftmax
+
+# insere os dados na rede neural
 for i in range(len(X_train)):
 	base.addSample(X_train[i],y_train[i])
 
@@ -45,20 +61,19 @@ for i in range(len(X_train)):
 treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.06, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
 epocas = 30
-
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
-    erro = treinamento.train()
-    learning_rate[i - 1] = erro
-    # if i % 50 == 0:
-    print("Erro " + str(i) + ": %s" % erro)
+    erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)
+    learning_rate[i-1] = erro		# learning_rate é usado apenas para plotar o gráfico
+    print(f"Erro {i}: {erro}")
+
 
 # imprime a matriz confusao de treinamento
 print('matriz confusao de treino: ')
-matrizConfusao = np.zeros((3,3))
+matrizConfusao = np.zeros((3,3))		# cria um array de duas dimensões 3x3
 for i in range(len(X_train)):
-	y_certo = np.argmax(y_train[i])
-	y_predito = np.argmax(rede.activate(X_train[i]))
+	y_certo = np.argmax(y_train[i])				# retorna o índice (0, 1, 2, 3...)
+	y_predito = np.argmax(rede.activate(X_train[i]))		# retorna o índice (0, 1, 2, 3...)
 	#print(y_certo)
 	#print(y_predito)
 	#print('---')
@@ -70,10 +85,8 @@ print(matrizConfusao)
 # imprime a matriz confusao de teste
 X_train2 = dfValidacao.iloc[:, 0:nInputs].values
 y_train2 = dfValidacao.iloc[:, nInputs:(nInputs+nOutputs)].values
-print('matriz confusao de teste :')
+print('matriz confusao de validação :')
 matrizConfusao2 = np.zeros((3,3))
-y_certo2 = 0
-y_predito2 = 0
 for i in range(len(X_train2)):
 	y_certo2 = np.argmax(y_train2[i])
 	y_predito2 = np.argmax(rede.activate(X_train2[i]))
