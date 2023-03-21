@@ -18,7 +18,7 @@ np.random.seed(0)
 np.random.permutation(seed)
 #np.random.seed(seed)
 
-nInputs = 36
+nInputs = 32
 hidden_layers = 9
 nOutputs = 3
 
@@ -31,10 +31,15 @@ dfValidacao	= df.loc[(tamanhoTreino+1):].copy()	# dataframe para validação da 
 X_train = dfTreino.iloc[:, 0:nInputs].values    # array com valores de entrada da rna
 y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valores para as saidas da rna
 
+#dfTreino.to_excel("dfTreino.xlsx")      # salva como csv, sem os índices      ###########################################
+#dfValidacao.to_excel("dfValidacao.xlsx")      # salva como csv, sem os índices      ###########################################
+#print(f"tamanho: {tamanhoTreino}")
+#print(X_train)
+#print(y_train)
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
+rede = buildNetwork(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
@@ -48,7 +53,8 @@ OBS: o atalho buildNetwork permite topologia apenas feedforward
 print(f"RNA: \n{rede}")		# mostra a configuranção da RNA
 #print(f"pesos sinápticos da RNA: \n{rede.params}")		# mostra o valor dos pesos sinápticos da RNA
 #print(f"camada de entrada: {rede['in']}")		# mostra o módo da rede de entrada
-#print(f"camada de oculta: {rede['hidden0']}")
+#print(f"camada de oculta0: {rede['hidden0']}")
+
 #print(f"camada de saida: {rede['out']}")
 #print(f"bias: {rede['bias']}")
 #print(f"recurrent: {rede['recurrent']}")			# para escolher entre RecurrentNetwork ou FeedForwardNetwork
@@ -63,7 +69,7 @@ for i in range(len(X_train)):
 # treinamento da rede neural pelo metodo back propagation
 treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 80
+epocas = 2000
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)

@@ -9,8 +9,10 @@ dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
 
+dfBruto.to_excel("dfBruto.xlsx", index=False)                                #############################################################
+
 # -----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
-condicao = dfTratado['<DATE>'].value_counts() < 9                       # TRUE para dias que tem menos de 8 velas (das 9h às 17h)
+condicao = dfTratado['<DATE>'].value_counts() < 9                       # TRUE para dias que tem menos de 9 velas (das 9h às 17h)
 datas = ((dfTratado['<DATE>'].value_counts()[condicao]).index).values   # datas dos dias incompletos
 print('As seguintes datas estão incompletas e foram apagadas:')
 for i in range(0, len(datas)):                                          # apagando o dia incompleto
@@ -21,7 +23,6 @@ for i in range(0, len(datas)):                                          # apagan
     dfTratado.drop(listaIndice, inplace=True)        # apaga as linhas dos dias incompletos
 # ---------------------------------------------------------
 
-#dfTratado.to_csv("dfTratado.csv", index=False)      # salva como csv, sem os índices
 
 #-----Criando novas colunas-------------------------
 dfTratado['<TAMANHO>'] = np.nan                                 # tam (tamanho da vela)
@@ -79,11 +80,11 @@ filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série con
 print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
 #---------------------------------------------
 
-dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
+dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices         #############################################
 #-----Novo dataframe apenas com as linha últeis---------------------
 colunasDf = ["<TIME>", "<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>", "<OPERAÇÃO>"] # seleciona quais colunas o dataframe deve possuir
 dfLimpo = dfTratado[colunasDf].copy()
-dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices
+dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ##################################################
 #--------------------------------------------------------------------
 
 
@@ -92,7 +93,7 @@ dfRna = pd.DataFrame({          # cria um dataframe com apenas uma linha
     'X1':[1],'X2':[1],'X3':[1],'X4':[1],'X5':[1],'X6':[1],'X7':[1],'X8':[1],'X9':[1],'X10':[1],
     'X11':[1],'X12':[1],'X13':[1],'X14':[1],'X15':[1],'X16':[1],'X17':[1],'X18':[1],'X19':[1],'X20':[1],
     'X21':[1],'X22':[1],'X23':[1],'X24':[1],'X25':[1],'X26':[1],'X27':[1],'X28':[1],'X29':[1],'X30':[1],
-    'X31':[1],'X32':[1],'X33':[1],'X34':[1],'X35':[1],'X36':[1],'Y1':[1],'Y2':[1],'Y3':[1]
+    'X31':[1],'X32':[1], 'Y1':[1],'Y2':[1],'Y3':[1]
 })
 contColuna = 0  # iteração para incluir colunas no dataframe 'dfRNA'
 contLinha = 0   # iteração para incluir linhas no dataframe 'dfRNA'
@@ -103,10 +104,7 @@ for linha, dado in dfLimpo.iterrows():
             contColuna = contColuna + 1
             dfRna.loc[contLinha,[f"X{contColuna}"]] = listaLinha[i]
 
-    else:           # para horário das 17h a coluna '<OPERAÇÃO>' deve ser incluida no datafrme 'dfRna'
-        for i in range(0,4):
-            contColuna = contColuna + 1
-            dfRna.loc[[contLinha],[f"X{contColuna}"]] = listaLinha[i]
+    else:           # para horário das 17h somente a coluna '<OPERAÇÃO>' deve ser incluida no datafrme 'dfRna'
 
         if(listaLinha[4] == "COMPRA"):
             dfRna.loc[[contLinha], ["Y1"]] = 1
@@ -127,7 +125,8 @@ for linha, dado in dfLimpo.iterrows():
         contLinha = contLinha + 1
 
 #print((dfRna))
-#dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
+dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
+dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ###########################################
 dfRna.to_csv("dfRna.csv", index=False)      # salva sem os índices
 
 
