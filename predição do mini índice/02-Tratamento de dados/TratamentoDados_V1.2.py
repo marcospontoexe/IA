@@ -58,11 +58,11 @@ for indice, coluna in dfTratado.iterrows():
 
 
         #VARIÁVEIS TRATADAS PARA TREINO (COMPRA)
-        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values))) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'COMPRA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (venda)
-        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values))) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'VENDA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (LATERAL)
@@ -70,7 +70,7 @@ for indice, coluna in dfTratado.iterrows():
             dfTratado.loc[[indice+8],['<OPERAÇÃO>']] = 'LATERAL'
 #----------------------------------------------------
 
-'''#------mostra quantas saidas foram geradas------
+#------mostra quantas saidas foram geradas------
 filtroCompra = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE COMPRAS: {sum(filtroCompra * 1)}")          # mostra quantas linhas que contém o valor "John"
 filtroVenda = dfTratado['<OPERAÇÃO>'] == 'VENDA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
@@ -78,12 +78,12 @@ print(f"QUANTIDADE DE VENDA: {sum(filtroVenda * 1)}")          # mostra quantas 
 filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
 print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
 #---------------------------------------------
-'''
-#dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
+
+dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices
 #-----Novo dataframe apenas com as linha últeis---------------------
 colunasDf = ["<TIME>", "<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>", "<OPERAÇÃO>"] # seleciona quais colunas o dataframe deve possuir
-dfLimpo = dfTratado[colunasDf]
-#dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices
+dfLimpo = dfTratado[colunasDf].copy()
+dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices
 #--------------------------------------------------------------------
 
 
@@ -94,7 +94,6 @@ dfRna = pd.DataFrame({          # cria um dataframe com apenas uma linha
     'X21':[1],'X22':[1],'X23':[1],'X24':[1],'X25':[1],'X26':[1],'X27':[1],'X28':[1],'X29':[1],'X30':[1],
     'X31':[1],'X32':[1],'X33':[1],'X34':[1],'X35':[1],'X36':[1],'Y1':[1],'Y2':[1],'Y3':[1]
 })
-
 contColuna = 0  # iteração para incluir colunas no dataframe 'dfRNA'
 contLinha = 0   # iteração para incluir linhas no dataframe 'dfRNA'
 for linha, dado in dfLimpo.iterrows():
@@ -127,7 +126,7 @@ for linha, dado in dfLimpo.iterrows():
         contColuna = 0
         contLinha = contLinha + 1
 
-print((dfRna))
+#print((dfRna))
 #dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
 dfRna.to_csv("dfRna.csv", index=False)      # salva sem os índices
 

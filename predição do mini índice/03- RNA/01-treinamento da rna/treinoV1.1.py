@@ -24,7 +24,7 @@ nOutputs = 3
 
 #importacao dos dados para aprendizado
 df = pd.read_csv('dfRna.csv', header=None)
-tamanhoTreino = int((df.shape[0])*0.8)		# define um tamanho de 80% do banco de dados para usar como treino (20% como validação)
+tamanhoTreino = int((df.shape[0])*0.75)		# define um tamanho de 75% do banco de dados para usar como treinamento. (25% como daddos para validação)
 
 dfTreino = df.loc[1:tamanhoTreino].copy()		# dataframe para treinar a rna
 dfValidacao	= df.loc[(tamanhoTreino+1):].copy()	# dataframe para validação da rna
@@ -46,11 +46,14 @@ automatically:
 OBS: o atalho buildNetwork permite topologia apenas feedforward
 '''
 print(f"RNA: \n{rede}")		# mostra a configuranção da RNA
-print(f"pesos sinápticos da RNA: \n{rede.params}")		# mostra o valor dos pesos sinápticos da RNA
-
+#print(f"pesos sinápticos da RNA: \n{rede.params}")		# mostra o valor dos pesos sinápticos da RNA
+#print(f"camada de entrada: {rede['in']}")		# mostra o módo da rede de entrada
+#print(f"camada de oculta: {rede['hidden0']}")
+#print(f"camada de saida: {rede['out']}")
+#print(f"bias: {rede['bias']}")
+#print(f"recurrent: {rede['recurrent']}")			# para escolher entre RecurrentNetwork ou FeedForwardNetwork
 
 base = SupervisedDataSet(nInputs, nOutputs)
-
 
 # insere os dados na rede neural
 for i in range(len(X_train)):
@@ -58,9 +61,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.06, momentum = 0.005, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 30
+epocas = 80
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)
@@ -70,6 +73,7 @@ for i in range(1, epocas):
 
 # imprime a matriz confusao de treinamento
 print('matriz confusao de treino: ')
+
 matrizConfusao = np.zeros((3,3))		# cria um array de duas dimensões 3x3
 for i in range(len(X_train)):
 	y_certo = np.argmax(y_train[i])				# retorna o índice (0, 1, 2, 3...)
