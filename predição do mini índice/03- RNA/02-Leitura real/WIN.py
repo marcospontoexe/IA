@@ -102,12 +102,13 @@ while(True):
 
     #--------Adicionando os valorea à entrada da rna----------
     X_train = dfRna.values  # array com valores de entrada da rna
-    saida = rede.activate(X_train)
-    if(saida == 0):      # COMPRA
+    saida = rede.activate(X_train)      # lista com o valor de cada saida
+    actv = np.argmax(saida)             # índice onde ocorreu o maior valor
+    if(actv == 0):      # COMPRA
         print('COMPRAR!')
-    elif (saida == 1):  # LATERAL
+    elif (actv == 1):  # LATERAL
         print('LATERAL!')
-    if (saida == 2):  # VENDA
+    if (actv == 2):  # VENDA
         print('VENDER!')
     else:
         print("ERRO!")
