@@ -1,16 +1,19 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-#import pybrain   # pip install https://github.com/pybrain/pybrain/archive/0.3.3.zip
+import pybrain   # pip install https://github.com/pybrain/pybrain/archive/0.3.3.zip
 
 import matplotlib.pyplot as plt
+
 from pybrain.tools.shortcuts import buildNetwork	# usado para construir a estrutura de uma rna
+from pybrain.structure import RecurrentNetwork
 from pybrain.datasets import SupervisedDataSet		# método de aprendizagem (supervisionado)
+from pybrain.structure import FullConnection		# para fazer a conexão entre as camadas
 from pybrain.supervised.trainers import BackpropTrainer	#método de treiamento supervisionado
-from pybrain.structure.modules import SoftmaxLayer, LSTMLayer	# funções de ativação
-from pybrain.structure.modules import SigmoidLayer
-from pybrain.structure.modules import TanhLayer
-from pybrain.structure.modules import BiasUnit		# bias
+#Sigmoid activation functions are used when the output of the neural network is continuous. Softmax activation functions are used when the output of the neural network is categorical.
+#https://towardsdatascience.com/activation-functions-neural-networks-1cbd9f8d91d6
+from pybrain.structure import SoftmaxLayer, LSTMLayer, SigmoidLayer, TanhLayer, LinearLayer		# funções de ativação
+from pybrain.structure import BiasUnit		# bias
 from pybrain.tools.customxml import NetworkWriter	# para salvar em xml
 
 seed = 176
@@ -39,24 +42,36 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
-'''When building networks with the buildNetwork shortcut, the parts are named
-automatically:
->>> net[’in’]
-<LinearLayer ’in’>
->>> net[’hidden0’]
-<SigmoidLayer ’hidden0’>
->>> net[’out’]
-<LinearLayer ’out’>
-OBS: o atalho buildNetwork permite topologia apenas feedforward
-'''
+rede = RecurrentNetwork()			# cria uma rna recorrente
+	#(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
+#-----adicionando camadas--------------------------------------
+rede.addInputModule(LinearLayer(nInputs, name='in'))		# adiciona uma camada de entrada
+rede.addModule(SigmoidLayer(hidden_layers, name='hidden0'))				# adiciona camada oculta
+rede.addModule(SigmoidLayer(8, name='hidden1'))				# adiciona camada oculta
+rede.addOutputModule(SoftmaxLayer(nOutputs, name='out'))			#adiciona camada de saida
+rede.addModule(BiasUnit(name='biasHidden0'))				# adiciona um bias a camada oulta
+rede.addModule(BiasUnit(name='biasHidden1'))				# adiciona um bias a camada oulta
+rede.addModule(BiasUnit(name='biasOut'))				# adiciona um bias a camada de saida
+#---------------------------------------------------------------
+
+#-----------------configurando as conexão entre as camadas------------------
+rede.addConnection(FullConnection(rede['in'], rede['hidden0']))			# conexão entre a camada de entrada e camada oculta
+rede.addConnection(FullConnection(rede['hidden0'], rede['hidden1']))		# conexão entre as camadas ocultas
+rede.addConnection(FullConnection(rede['hidden1'], rede['out']))		# conexão entre a camada oculta e camada de saida
+rede.addConnection(FullConnection(rede['biasHidden0'], rede['hidden0']))	# conexão entre a bias e a camada oculta
+rede.addConnection(FullConnection(rede['biasHidden1'], rede['hidden1']))	# conexão entre a bias e a camada oculta
+rede.addConnection(FullConnection(rede['biasOut'], rede['out']))	# conexão entre a bias e a camada de saida
+rede.addRecurrentConnection(FullConnection(rede['hidden0'], rede['hidden0']))	# adicionando as conexões recorrentes
+rede.addRecurrentConnection(FullConnection(rede['hidden1'], rede['hidden1']))	# adicionando as conexões recorrentes
+#---------------------------------------------------------------
+rede.sortModules()				# inicialização da rna
 print(f"RNA: \n{rede}")		# mostra a configuranção da RNA
 #print(f"pesos sinápticos da RNA: \n{rede.params}")		# mostra o valor dos pesos sinápticos da RNA
 #print(f"camada de entrada: {rede['in']}")		# mostra o módo da rede de entrada
 #print(f"camada de oculta0: {rede['hidden0']}")
-
 #print(f"camada de saida: {rede['out']}")
-#print(f"bias: {rede['bias']}")
+#print(f"biasHidden0: {rede['biasHidden0']}")
+#print(f"biasOut: {rede['biasOut']}")
 #print(f"recurrent: {rede['recurrent']}")			# para escolher entre RecurrentNetwork ou FeedForwardNetwork
 
 base = SupervisedDataSet(nInputs, nOutputs)
@@ -67,10 +82,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.1, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 20
-00
+epocas = 2000
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)

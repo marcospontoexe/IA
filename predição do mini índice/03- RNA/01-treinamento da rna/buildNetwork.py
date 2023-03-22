@@ -7,9 +7,12 @@ import matplotlib.pyplot as plt
 from pybrain.tools.shortcuts import buildNetwork	# usado para construir a estrutura de uma rna
 from pybrain.datasets import SupervisedDataSet		# método de aprendizagem (supervisionado)
 from pybrain.supervised.trainers import BackpropTrainer	#método de treiamento supervisionado
-from pybrain.structure.modules import SoftmaxLayer, LSTMLayer	# funções de ativação
-from pybrain.structure.modules import SigmoidLayer
+#Sigmoid activation functions are used when the output of the neural network is continuous. Softmax activation functions are used when the output of the neural network is categorical.
+#https://towardsdatascience.com/activation-functions-neural-networks-1cbd9f8d91d6
+from pybrain.structure.modules import SoftmaxLayer, SigmoidLayer 	# funções de ativação
+from pybrain.structure.modules import LSTMLayer
 from pybrain.structure.modules import TanhLayer
+from pybrain.structure.modules import LinearLayer
 from pybrain.structure.modules import BiasUnit		# bias
 from pybrain.tools.customxml import NetworkWriter	# para salvar em xml
 
@@ -39,7 +42,7 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
+rede = buildNetwork(nInputs,9,5, nOutputs,hiddenclass=SigmoidLayer, bias=True, outputbias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
@@ -67,10 +70,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.1, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 20
-00
+epocas = 200
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)
