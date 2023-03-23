@@ -43,7 +43,7 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs, 20, 9, 6, 4, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
+rede = buildNetwork(nInputs, 20, 5, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
