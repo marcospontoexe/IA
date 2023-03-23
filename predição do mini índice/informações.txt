@@ -81,6 +81,7 @@ treinar toda sexta (ultimo ano), para usar na semana seguinte
 
 
 
-
-
-
+ALTERAÇÕES:
+*diminuir a dimensão: fornecer somente tamanho da vela, ou variação de preço (possível correlação)
+*proporção de dados entre as classes (compra, lateral, venda)
+*aplicar padronização após a normalização

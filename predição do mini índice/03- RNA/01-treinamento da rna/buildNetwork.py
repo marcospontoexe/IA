@@ -29,6 +29,7 @@ nOutputs = 3
 df = pd.read_csv('dfRna.csv', header=None)
 tamanhoTreino = int((df.shape[0])*0.75)		# define um tamanho de 75% do banco de dados para usar como treinamento. (25% como daddos para validação)
 
+
 dfTreino = df.loc[1:tamanhoTreino].copy()		# dataframe para treinar a rna
 dfValidacao	= df.loc[(tamanhoTreino+1):].copy()	# dataframe para validação da rna
 X_train = dfTreino.iloc[:, 0:nInputs].values    # array com valores de entrada da rna
@@ -42,7 +43,7 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs,9,5, nOutputs,hiddenclass=SigmoidLayer, bias=True, outputbias=True)
+rede = buildNetwork(nInputs, 20, 9, 6, 4, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
@@ -70,9 +71,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.1, momentum = 0.005, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 200
+epocas = 1000
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)
@@ -87,6 +88,7 @@ matrizConfusao = np.zeros((3,3))		# cria um array de duas dimensões 3x3
 for i in range(len(X_train)):
 	y_certo = np.argmax(y_train[i])				# retorna o índice (0, 1, 2, 3...)
 	y_predito = np.argmax(rede.activate(X_train[i]))		# retorna o índice (0, 1, 2, 3...)
+	#print(f"saida da RNA: {rede.activate(X_train[i])}")
 	#print(y_certo)
 	#print(y_predito)
 	#print('---')

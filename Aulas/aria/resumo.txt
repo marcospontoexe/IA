@@ -7,10 +7,14 @@ AULA 01: https://www.youtube.com/watch?v=areBEw5-nrc&list=PLM8TXdmR4D2NfGVIZxXQM
 AULA 02: https://www.youtube.com/watch?v=jd7U7x6Z_iQ&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=2
 * Aprendizagem supervisionada:
 	Modelos preditivos -> Calssificação e Regressão
+		-Classificação: Ao apresentar dados à RNA, esta tenta atribuir uma classe a esses dados.
+		-Regressão: Ao apresentar dados à RNA, esta tentar prever um número.
 
 * Aprendizagem não supervisionada
+	A RNA agrupa os dados fornecidos a ela, criando classes distintas para as amostras fornecidas.
 
 * Aprendizagem semi-supervisionada
+	Mistura a aprendizagem supervisionada e não supervisionada.
 
 * Aprendizagem por reforço
 
@@ -21,12 +25,12 @@ AULA 02: https://www.youtube.com/watch?v=jd7U7x6Z_iQ&list=PLM8TXdmR4D2NfGVIZxXQM
 AULA 03: https://www.youtube.com/watch?v=0xw98dvCUzI&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=3
 * pré-processamento: 
 	-eliminar atributos irrelevantes, correlacionados, outliers, duplicados
+	-manter um proporção da quantidade de dados para cada classe
 	-reduzir dimensionalidade
-	-ferramentas: boxplot, variancia, desvio padrão, média, mediana, covariância, correlação
+	-ferramentas para verificar a base de dados: boxplot, variancia, desvio padrão, média, mediana, covariância, correlação
 	-transformar dados qualitativos em quantitativos, e vice e versa.
-	-normalização: quando o limite superior ou inferior de atributos diferentes estão muito diferentes, 
-		       ou estão em escalas diferentes, dando mais relevância para algumas variáveis.
-	-tipos de normalização: reescala e padronização (melhor para outliers) 
+	-normalização: quanto maior for o valor de um dado de entrada, mais forte será a sua sinápse. É importante manter todos os dados na mesma proporça escalar (entre -1 e +1, ou entre 0 e 1)
+	-tipos de normalização: reescala(valores entre 0 e 1) e padronização (média é 0 e o desvio padrão é 1. melhor para outliers) 
 
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 AULA 04: https://www.youtube.com/watch?v=XzGrwHa3wGg&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=4&t=226s

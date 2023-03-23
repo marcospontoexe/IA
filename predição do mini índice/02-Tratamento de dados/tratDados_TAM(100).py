@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 
@@ -9,7 +10,6 @@ dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
 
-dfBruto.to_excel("dfBruto.xlsx", index=False)                                #############################################################
 
 # -----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
 condicao = dfTratado['<DATE>'].value_counts() < 9                       # TRUE para dias que tem menos de 9 velas (das 9h às 17h)
@@ -72,21 +72,81 @@ for indice, coluna in dfTratado.iterrows():
 #----------------------------------------------------
 
 #------mostra quantas saidas foram geradas------
+print(f"Quantidade de COMPRA antes da equalização:")
 filtroCompra = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
-print(f"QUANTIDADE DE COMPRAS: {sum(filtroCompra * 1)}")          # mostra quantas linhas que contém o valor "John"
+compra = sum(filtroCompra * 1)
+print(f"QUANTIDADE DE COMPRAS: {compra}")          # mostra quantas linhas que contém o valor "John"
 filtroVenda = dfTratado['<OPERAÇÃO>'] == 'VENDA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
-print(f"QUANTIDADE DE VENDA: {sum(filtroVenda * 1)}")          # mostra quantas linhas que contém o valor "John"
+venda = sum(filtroVenda * 1)
+print(f"QUANTIDADE DE VENDA: {venda}")          # mostra quantas linhas que contém o valor "John"
 filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
-print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
+lateral = sum(filtroLateral * 1)
+print(f"QUANTIDADE DE LATERAL: {lateral}")          # mostra quantas linhas que contém o valor "John"
+menor = min(compra, venda, lateral)
+print(f"menor quantidade: {menor}")
 #---------------------------------------------
 
-dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices         #############################################
+
+
+#----Mantem proporção de valores entre as classes------
+if(compra > menor):
+    datasCompra = dfTratado[filtroCompra]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+    difer = compra-menor
+    for i in range(0,difer):
+        indiceCompras = ((dfTratado[dfTratado['<DATE>'] == datasCompra[i]]).index).values
+        dfTratado.drop(indiceCompras, inplace=True)
+
+
+if(venda > menor):
+    datasVenda = dfTratado[filtroVenda]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+    difer = venda-menor
+    for i in range(0,difer):
+        indiceVendas = ((dfTratado[dfTratado['<DATE>'] == datasVenda[i]]).index).values
+        dfTratado.drop(indiceVendas, inplace=True)
+
+
+if(lateral > menor):
+    datasLateral = dfTratado[filtroLateral]['<DATE>'].values  # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+    difer = lateral - menor
+    for i in range(0, difer):
+        indiceLateral = ((dfTratado[dfTratado['<DATE>'] == datasLateral[i]]).index).values
+        dfTratado.drop(indiceLateral, inplace=True)
+#------------------------------------------------------
+
+#------mostra quantas saidas foram geradas------
+print(f"Quantidade de COMPRA após a equalização:")
+filtroCompra = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+compra = sum(filtroCompra * 1)
+print(f"QUANTIDADE DE COMPRAS: {compra}")          # mostra quantas linhas que contém o valor "John"
+filtroVenda = dfTratado['<OPERAÇÃO>'] == 'VENDA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+venda = sum(filtroVenda * 1)
+print(f"QUANTIDADE DE VENDA: {venda}")          # mostra quantas linhas que contém o valor "John"
+filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+lateral = sum(filtroLateral * 1)
+print(f"QUANTIDADE DE LATERAL: {lateral}")          # mostra quantas linhas que contém o valor "John"
+menor = min(compra, venda, lateral)
+
+#---------------------------------------------
+
 #-----Novo dataframe apenas com as linha últeis---------------------
 colunasDf = ["<TIME>", "<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>", "<OPERAÇÃO>"] # seleciona quais colunas o dataframe deve possuir
 dfLimpo = dfTratado[colunasDf].copy()
-dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ##################################################
+
 #--------------------------------------------------------------------
 
+'''#--------visualizando o dataframe----------
+plt.boxplot(dfLimpo["<TAMANHO NORMALIZADO>"])
+plt.title("TAMANHO DA VELA")
+plt.xlabel("TAMANHO NORMALIZADO")
+plt.ylabel("VALOR")
+plt.show()
+#-----------------------------------------
+'''
+#-----verificando a correlação--------
+cor = dfLimpo.loc[:,["<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>"]].corr()
+#cor.style.background_gradient(cmap='coolwarm')
+print(cor)
+#--------------------------------------
 
 #-----Gerando o dataframe para a RNA---------
 dfRna = pd.DataFrame({          # cria um dataframe com apenas uma linha
@@ -125,8 +185,11 @@ for linha, dado in dfLimpo.iterrows():
         contLinha = contLinha + 1
 
 #print((dfRna))
-dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
+dfBruto.to_excel("dfBruto.xlsx")                                #############################################################
+dfTratado.to_excel("dfTratado.xlsx")      # salva como csv, sem os índices         #############################################
 dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ###########################################
+cor.to_excel("correlação.xlsx")      # salva como csv, sem os índices      ##################################################
+dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
 dfRna.to_csv("dfRna.csv", index=False)      # salva sem os índices
 
 
