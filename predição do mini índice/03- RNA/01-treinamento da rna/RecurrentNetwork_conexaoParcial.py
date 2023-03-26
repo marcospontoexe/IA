@@ -9,6 +9,7 @@ from pybrain.tools.shortcuts import buildNetwork	# usado para construir a estrut
 from pybrain.structure import RecurrentNetwork
 from pybrain.datasets import SupervisedDataSet		# método de aprendizagem (supervisionado)
 from pybrain.structure import FullConnection		# para fazer a conexão entre as camadas
+#from pybrain.structure import PartialConnection					# para criar conexões parciais
 from pybrain.supervised.trainers import BackpropTrainer	#método de treiamento supervisionado
 #Sigmoid activation functions are used when the output of the neural network is continuous. Softmax activation functions are used when the output of the neural network is categorical.
 #https://towardsdatascience.com/activation-functions-neural-networks-1cbd9f8d91d6
@@ -44,25 +45,60 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
 rede = RecurrentNetwork()			# cria uma rna recorrente
 	#(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
-#-----adicionando camadas--------------------------------------
-rede.addInputModule(LinearLayer(nInputs, name='in'))		# adiciona uma camada de entrada
-rede.addModule(SigmoidLayer(20, name='hidden0'))				# adiciona camada oculta
-rede.addModule(SigmoidLayer(5, name='hidden1'))				# adiciona camada oculta
-rede.addOutputModule(LinearLayer(nOutputs, name='out'))			#adiciona camada de saida
-rede.addModule(BiasUnit(name='biasHidden0'))				# adiciona um bias a camada oulta
-rede.addModule(BiasUnit(name='biasHidden1'))				# adiciona um bias a camada oulta
-rede.addModule(BiasUnit(name='biasOut'))				# adiciona um bias a camada de saida
+#-----criando as camadas com seus neurônios------------------------
+input_layer = LinearLayer(nInputs)  	# cria uma camada de entrada
+hidden0 = SigmoidLayer(20)			# cria uma camada oculta
+hidden1 = SigmoidLayer(5)			# cria uma camada oculta
+output_layer = LinearLayer(nOutputs)  #cria camada de saida
+biasHidden0 = BiasUnit()			# cria um bias para a camada oculta 0
+biasHidden1 = BiasUnit()			# cria um bias para a camada oculta
+biasOut = BiasUnit()			# cria um bias para a camada de saida
+
+#------------adicionando as camadas na rna------------
+rede.addInputModule(input_layer)		# adiciona uma camada de entrada
+rede.addModule(hidden0)				# adiciona camada oculta
+rede.addModule(hidden1)				# adiciona camada oculta
+rede.addOutputModule(output_layer)	# adiciona camada de saida
+rede.addModule(biasHidden0)				# adiciona um bias a camada oulta
+rede.addModule(biasHidden1)				# adiciona um bias a camada oulta
+rede.addModule(biasOut)				# adiciona um bias a camada de saida
 #---------------------------------------------------------------
 
 #-----------------configurando as conexão entre as camadas------------------
-rede.addConnection(FullConnection(rede['in'], rede['hidden0']))			# conexão entre a camada de entrada e camada oculta
-rede.addConnection(FullConnection(rede['hidden0'], rede['hidden1']))		# conexão entre as camadas ocultas
-rede.addConnection(FullConnection(rede['hidden1'], rede['out']))		# conexão entre a camada oculta e camada de saida
-rede.addConnection(FullConnection(rede['biasHidden0'], rede['hidden0']))	# conexão entre a bias e a camada oculta
-rede.addConnection(FullConnection(rede['biasHidden1'], rede['hidden1']))	# conexão entre a bias e a camada oculta
-rede.addConnection(FullConnection(rede['biasOut'], rede['out']))	# conexão entre a bias e a camada de saida
-rede.addRecurrentConnection(FullConnection(rede['hidden0'], rede['hidden0']))	# adicionando as conexões recorrentes
-rede.addRecurrentConnection(FullConnection(rede['hidden1'], rede['hidden1']))	# adicionando as conexões recorrentes
+#slicePreco = input_layer(0,3)
+slicePreco =    slice(0,5)		#cria uma fatia na camada de entrada para <PREÇO>
+sliceTamanho =  slice(11,20)		#cria uma fatia na camada de entrada para <TAMANHO NORMALIZADO>
+sliceVariacao = slice(21,26)		#cria uma fatia na camada de entrada para <VARIAÇÃO DO PREÇO NORMALIZADO>
+sliceVolume =   slice(27,31)		#cria uma fatia na camada de entrada para <VOLUME NORMALIZADO>
+#rede.addInputModule(slicePreco)
+#rede.addInputModule(sliceTamanho)
+#rede.addInputModule(sliceVariacao)
+#rede.addInputModule(sliceVolume)
+
+inputPreco_to_hidden = FullConnection(input_layer, hidden0, inSlice=[0,5])		#cria um modo de conexão entre a fatia de entrada e a camada oculta
+#inputTamanho_to_hidden = FullConnection(input_layer, hidden0, inSlice=sliceTamanho)
+#inputVariacao_to_hidden = FullConnection(input_layer, hidden0, inSlice=slicePreco)
+#inputVolume_to_hidden = FullConnection(input_layer, hidden0, inSlice=slicePreco)
+
+hidden0_to_hidden1 = FullConnection(hidden0, hidden1)		# cria um modo de conexão entre as camadas ocultas
+hidden1_to_output = FullConnection(hidden1, output_layer)		# cria um modo de conexão conexão entre a camada oculta e camada de saida
+biasHidden0_to_hidden0 = FullConnection(biasHidden0, hidden0) # cria um modo de conexão entre bias0 e camada oculta 0
+biasHidden1_to_hidden1 = FullConnection(biasHidden1, hidden1) # cria um modo de conexão entre bias1 e camada oculta 1
+biasOut_to_out = FullConnection(biasOut, output_layer) # cria um modo de conexão entre biasout e camada de saida
+hidden0_to_hidden0 = FullConnection(hidden0, hidden0)		# cria um modo de conexão entre as camadas ocultas 0
+hidden1_to_hidden1 = FullConnection(hidden1, hidden1)		# cria um modo de conexão entre as camadas ocultas 1
+
+rede.addConnection(inputPreco_to_hidden)			# conexão entre a camada slice de entrada e camada oculta
+#rede.addConnection(FullConnection(rede['input_layer'], rede['hidden0']))			# conexão entre a camada slice de entrada e camada oculta
+#rede.addConnection(FullConnection(rede['input_layer'], rede['hidden0']))			# conexão entre a camada slice de entrada e camada oculta
+#rede.addConnection(FullConnection(rede['input_layer'], rede['hidden0']))			# conexão entre a camada slice de entrada e camada oculta
+rede.addConnection(hidden0_to_hidden1)		# adidiona conexão entre as camadas ocultas
+rede.addConnection(hidden1_to_output)		# adidiona conexão entre a oculta e a saida
+rede.addConnection(biasHidden0_to_hidden0)	# adidiona conexão entre a bias e a camada oculta
+rede.addConnection(biasHidden1_to_hidden1)	#adidiona conexão entre a bias e a camada oculta
+rede.addConnection(biasOut_to_out)	#adidiona conexão entre a bias e a camada de saida
+rede.addRecurrentConnection(hidden0_to_hidden0)	# adicionando as conexões recorrentes
+rede.addRecurrentConnection(hidden1_to_hidden1)	# adicionando as conexões recorrentes
 #---------------------------------------------------------------
 rede.sortModules()				# inicialização da rna
 print(f"RNA: \n{rede}")		# mostra a configuranção da RNA
@@ -82,9 +118,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.1, momentum = 0.005, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.7, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 1000
+epocas = 2000
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)

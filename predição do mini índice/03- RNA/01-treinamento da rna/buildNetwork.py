@@ -35,6 +35,7 @@ dfValidacao	= df.loc[(tamanhoTreino+1):].copy()	# dataframe para validação da 
 X_train = dfTreino.iloc[:, 0:nInputs].values    # array com valores de entrada da rna
 y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valores para as saidas da rna
 
+#df.to_excel("df.xlsx")
 #dfTreino.to_excel("dfTreino.xlsx")      # salva como csv, sem os índices      ###########################################
 #dfValidacao.to_excel("dfValidacao.xlsx")      # salva como csv, sem os índices      ###########################################
 #print(f"tamanho: {tamanhoTreino}")
@@ -43,7 +44,7 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs, 20, 5, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
+rede = buildNetwork(nInputs, 12, 7, 4, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
@@ -71,9 +72,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
-#treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 1000
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.8, batchlearning=False)
+#treinamento.trainUntilConvergence(maxEpochs=None, verbose=None, continueEpochs=30, validationProportion=0.25)
+epocas = 2000
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)

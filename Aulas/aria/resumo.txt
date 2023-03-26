@@ -8,10 +8,15 @@ AULA 02: https://www.youtube.com/watch?v=jd7U7x6Z_iQ&list=PLM8TXdmR4D2NfGVIZxXQM
 * Aprendizagem supervisionada:
 	Modelos preditivos -> Calssificação e Regressão
 		-Classificação: Ao apresentar dados à RNA, esta tenta atribuir uma classe a esses dados.
-		-Regressão: Ao apresentar dados à RNA, esta tentar prever um número.
+		-Regressão: Ao apresentar dados à RNA, esta tentar prever um número. Cria uma função para determinar um valor em relação as variáveis de entrada.
+			-regressão linear
+			-regressão logística
 
 * Aprendizagem não supervisionada
 	A RNA agrupa os dados fornecidos a ela, criando classes distintas para as amostras fornecidas.
+	-aprendizagem baseado em memória. 
+	-aprendizagem Hebbiana.
+	-aprendizagem competitiva.
 
 * Aprendizagem semi-supervisionada
 	Mistura a aprendizagem supervisionada e não supervisionada.
@@ -35,10 +40,11 @@ AULA 03: https://www.youtube.com/watch?v=0xw98dvCUzI&list=PLM8TXdmR4D2NfGVIZxXQM
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 AULA 04: https://www.youtube.com/watch?v=XzGrwHa3wGg&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=4&t=226s
 * Aprendizagem supervisionada:
+    como cada modelo é treinado:
 	-Support vector machine: Quais amostras A se parecem mais com B, quais B se parecem mais com A, mas eu ainda tenho certeza doque elas são
-	-Naive Bayes: Assume que as variáveis são independentes. Assume uma classe com base na probabilidade de cada variável
+	-Naive Bayes: Assume que as variáveis são independentes. Escolhe uma classe com base na probabilidade de cada variável pertencer a determinada classe.
 	-RNA: que parte do cérebro fica mais ativada quando recebe amostras de determinada classe.
-	-Learning vector quantization: Cada classe elege uma amostra representante, e essa amostra decide a classe de cada amostra.
+	-Learning vector quantization: Cada classe elege uma amostra representante, e essa amostra decide a classe de cada amostra, ap partir de semelhanças com ela mesma.
 	-Random florest: Para um elevado número de amostras, essas amostras são divididas, e para cada divisão é usado uma árvore de decisão.
 	-Gradient/Ada boosting: usa árvore de decisões, e para as amostras com erro na classificação, é usada outra árvore de decisões.
 * Escolha das variáveis:
@@ -100,3 +106,5 @@ AULA 09: https://www.youtube.com/watch?v=xpo7neF_mEE&list=PLM8TXdmR4D2NfGVIZxXQM
 		- Term-frequency inverse document - Tf-idf)
 	- Tokenização
 	- gpt-3
+
+

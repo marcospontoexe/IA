@@ -11,6 +11,7 @@ filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h 
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
 
 
+
 # -----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
 condicao = dfTratado['<DATE>'].value_counts() < 9                       # TRUE para dias que tem menos de 9 velas (das 9h às 17h)
 datas = ((dfTratado['<DATE>'].value_counts()[condicao]).index).values   # datas dos dias incompletos
@@ -59,11 +60,11 @@ for indice, coluna in dfTratado.iterrows():
 
 
         #VARIÁVEIS TRATADAS PARA TREINO (COMPRA)
-        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*1)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5))):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'COMPRA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (venda)
-        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*1)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5))):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'VENDA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (LATERAL)
@@ -89,24 +90,24 @@ print(f"menor quantidade: {menor}")
 
 
 #----Mantem proporção de valores entre as classes------
-if(compra > menor):
+if(compra > menor):     # caso a quantidadede 'COMPRA' não seja o menor valor
     datasCompra = dfTratado[filtroCompra]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
     difer = compra-menor
     for i in range(0,difer):
-        indiceCompras = ((dfTratado[dfTratado['<DATE>'] == datasCompra[i]]).index).values
-        dfTratado.drop(indiceCompras, inplace=True)
+        indiceCompras = ((dfTratado[dfTratado['<DATE>'] == datasCompra[i]]).index).values   # array com os índices de cada data
+        dfTratado.drop(indiceCompras, inplace=True)             # apaga os índices das datas 'datasCompra'
 
 
-if(venda > menor):
-    datasVenda = dfTratado[filtroVenda]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+if(venda > menor):     # caso a quantidadede 'VENDE' não seja o menor valor
+    datasVenda = dfTratado[filtroVenda]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'VENDA'
     difer = venda-menor
     for i in range(0,difer):
         indiceVendas = ((dfTratado[dfTratado['<DATE>'] == datasVenda[i]]).index).values
         dfTratado.drop(indiceVendas, inplace=True)
 
 
-if(lateral > menor):
-    datasLateral = dfTratado[filtroLateral]['<DATE>'].values  # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+if(lateral > menor):         # caso a quantidadede 'LATERAL' não seja o menor valor
+    datasLateral = dfTratado[filtroLateral]['<DATE>'].values  # array contendo as datas de '<OPERAÇÃO>' == 'LATERAL'
     difer = lateral - menor
     for i in range(0, difer):
         indiceLateral = ((dfTratado[dfTratado['<DATE>'] == datasLateral[i]]).index).values
@@ -125,12 +126,43 @@ filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série con
 lateral = sum(filtroLateral * 1)
 print(f"QUANTIDADE DE LATERAL: {lateral}")          # mostra quantas linhas que contém o valor "John"
 menor = min(compra, venda, lateral)
+#---------------------------------------------
 
+#------reorganização do dataframe-------------
+'''dfReordenado = pd.DataFrame({          # cria um dataframe com apenas uma linha
+    '<DATE>':[1],'<TIME>':[1],'<TAMANHO>':[1],'<TAMANHO NORMALIZADO>':[1],'<VARIAÇÃO DO PREÇO>':[1],
+    '<VARIAÇÃO DO PREÇO NORMALIZADO>':[1],'<PREÇO>':[1],'<VOLUME NORMALIZADO>':[1],
+    '<TAMANHO MÉDIO NORMALIZADO DAS VELAS>':[1],'<VOLUME MÉDIO NORMALIZADO DAS VELAS>':[1],
+    '<OPERAÇÃO>':[1]
+})'''
+dfReordenado = dfTratado.copy()
+tam = dfTratado.shape[0]    # quantidade de linhas do dftratado
+filtroCompra1 = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+filtroVenda1 = dfTratado['<OPERAÇÃO>'] == 'VENDA'
+filtroLateral1 = dfTratado['<OPERAÇÃO>'] == 'LATERAL'
+datasCompra1 = dfTratado[filtroCompra1]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+datasVenda1 = dfTratado[filtroVenda1]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+datasLateral1 = dfTratado[filtroLateral1]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+indiceDfReordenado = dfReordenado.index.values
+cont = 0
+for i in range(0, len(datasCompra1) ):
+    indiceCompras1 = ((dfTratado[dfTratado['<DATE>'] == datasCompra1[i]]).index).values  # array com os índices de cada data
+    indiceVendas1 = ((dfTratado[dfTratado['<DATE>'] == datasVenda1[i]]).index).values  # array com os índices de cada data
+    indiceLateral1 = ((dfTratado[dfTratado['<DATE>'] == datasLateral1[i]]).index).values  # array com os índices de cada data
+    for j in range(0, len(indiceCompras1)):
+        dfReordenado.loc[[indiceDfReordenado[cont]]] = dfTratado.loc[[indiceCompras1[j]]].values
+        cont = cont+1
+    for j in range(0, len(indiceVendas1)):
+        dfReordenado.loc[[indiceDfReordenado[cont]]] = dfTratado.loc[[indiceVendas1[j]]].values
+        cont = cont+1
+    for j in range(0, len(indiceLateral1)):
+        dfReordenado.loc[[indiceDfReordenado[cont]]] = dfTratado.loc[[indiceLateral1[j]]].values
+        cont = cont+1
 #---------------------------------------------
 
 #-----Novo dataframe apenas com as linha últeis---------------------
 colunasDf = ["<TIME>", "<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>", "<OPERAÇÃO>"] # seleciona quais colunas o dataframe deve possuir
-dfLimpo = dfTratado[colunasDf].copy()
+dfLimpo = dfReordenado[colunasDf].copy()
 
 #--------------------------------------------------------------------
 
@@ -191,6 +223,7 @@ dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ###
 cor.to_excel("correlação.xlsx")      # salva como csv, sem os índices      ##################################################
 dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
 dfRna.to_csv("dfRna.csv", index=False)      # salva sem os índices
+dfReordenado.to_excel("dfReordenado.xlsx")      # salva sem os índices
 
 
 

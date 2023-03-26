@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 
@@ -9,7 +10,7 @@ dfBruto = pd.read_csv("WIN$_H1.csv", sep="\t", usecols=selecionarCol)
 filtro = dfBruto["<TIME>"] != "18:00:00"        # filtra apenas as velas das 9h às 17h
 dfTratado = dfBruto[filtro].loc[:, ["<DATE>", "<TIME>"]].copy()     # copia para novo dataframe apenas as colunas "<DATE>" e "<TIME>", mantendo os mesos índices
 
-dfBruto.to_excel("dfBruto.xlsx", index=False)                                #############################################################
+
 
 # -----verificando se o dataframe contem todos as velas 9h-17h) do dia-------------
 condicao = dfTratado['<DATE>'].value_counts() < 9                       # TRUE para dias que tem menos de 9 velas (das 9h às 17h)
@@ -44,26 +45,27 @@ somaTamanho = 0
 for indice, coluna in dfTratado.iterrows():
     if (coluna["<TIME>"] == "09:00:00"):    # para as velas das 9h às 16h
         varMax = float(dfBruto.loc[indice:indice+7, ["<HIGH>"]].max().values)    # maior preço de negociação no dia (das 9h às 16h)
+        varMim = float(dfBruto.loc[indice:indice + 7, ["<LOW>"]].min().values)  # menor preço de negociação no dia (das 9h às 16h)
         ivol = float(dfBruto.loc[indice:indice+7, ["<VOL>"]].max().values)# (maior volume encontrado no dia, das 9h às 16h)
         ivar = int(dfTratado.loc[indice:indice + 7,["<VARIAÇÃO DO PREÇO>"]].max().values)  # maior variação de preço do dia das 9h às 16h
 
         dfTratado.loc[indice:indice+8, ["<TAMANHO NORMALIZADO>"]] = ((dfTratado.loc[indice:indice+8, ["<TAMANHO>"]]).values) / ivar  # tamNor (normalização do tamanho da vela)
         dfTratado.loc[indice:indice+8, ["<VARIAÇÃO DO PREÇO NORMALIZADO>"]] = (((dfTratado.loc[indice:indice+8, ["<VARIAÇÃO DO PREÇO>"]]).values)) / ivar  # varNor (normalização da variação de preço)
-        dfTratado.loc[indice:indice+8, ['<PREÇO>']] = (((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values)) / varMax  # preco (valor de abertura normalizado)
+        dfTratado.loc[indice:indice+8, ['<PREÇO>']] = (((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) - varMim) / (varMax - varMim) # preco (valor de abertura normalizado)
         dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = (((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values)) / ivol  # volNor (volume normalizado)
 
-        somaTamanho = abs(dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]].values).sum()   # soma o valor absoluto do tamanho normalizado das velas das 8h às 16h
-        somaVolume = abs(dfTratado.loc[indice:indice+7, ["<VOLUME NORMALIZADO>"]].values).sum()     # soma o valor absoluto do volume normalizado das velas das 8h às 16h
+        somaTamanho = abs(dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]].values).sum()   # soma o valor absoluto do tamanho normalizado das velas das 9h às 16h
+        somaVolume = abs(dfTratado.loc[indice:indice+7, ["<VOLUME NORMALIZADO>"]].values).sum()     # soma o valor absoluto do volume normalizado das velas das 9h às 16h
         dfTratado.loc[[indice+8], ['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']] = somaTamanho / 8      # tamMed (é o tamanho médio entre as velas do dia)
         dfTratado.loc[[indice+8], ['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']] = somaVolume / 8        # volMed (é o volume médio normalizado entre as velas do dia)
 
 
         #VARIÁVEIS TRATADAS PARA TREINO (COMPRA)
-        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+        if( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) > 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*1)) ):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'COMPRA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (venda)
-        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) and ((float(dfTratado.loc[[indice+8],["<VOLUME NORMALIZADO>"]].values)) >= (float(dfTratado.loc[[indice+8],['<VOLUME MÉDIO NORMALIZADO DAS VELAS>']].values)*0.5)) ):
+        elif( ((int(dfTratado.loc[[indice+8], ["<TAMANHO>"]].values)) < 0) and ((abs(float(dfTratado.loc[[indice+8],["<TAMANHO NORMALIZADO>"]].values))) >= (float(dfTratado.loc[[indice+8],['<TAMANHO MÉDIO NORMALIZADO DAS VELAS>']].values)*1)) ):
             dfTratado.loc[[indice+8], ['<OPERAÇÃO>']] = 'VENDA'
 
         # VARIÁVEIS TRATADAS PARA TREINO (LATERAL)
@@ -72,21 +74,112 @@ for indice, coluna in dfTratado.iterrows():
 #----------------------------------------------------
 
 #------mostra quantas saidas foram geradas------
+print(f"Quantidade de rótulos antes da equalização:")
 filtroCompra = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
-print(f"QUANTIDADE DE COMPRAS: {sum(filtroCompra * 1)}")          # mostra quantas linhas que contém o valor "John"
+compra = sum(filtroCompra * 1)
+print(f"QUANTIDADE DE COMPRAS: {compra}")          # mostra quantas linhas que contém o valor "John"
 filtroVenda = dfTratado['<OPERAÇÃO>'] == 'VENDA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
-print(f"QUANTIDADE DE VENDA: {sum(filtroVenda * 1)}")          # mostra quantas linhas que contém o valor "John"
+venda = sum(filtroVenda * 1)
+print(f"QUANTIDADE DE VENDA: {venda}")          # mostra quantas linhas que contém o valor "John"
 filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
-print(f"QUANTIDADE DE LATERAL: {sum(filtroLateral * 1)}")          # mostra quantas linhas que contém o valor "John"
+lateral = sum(filtroLateral * 1)
+print(f"QUANTIDADE DE LATERAL: {lateral}")          # mostra quantas linhas que contém o valor "John"
+menor = min(compra, venda, lateral)
+print(f"menor quantidade: {menor}")
 #---------------------------------------------
 
-dfTratado.to_excel("dfTratado.xlsx", index=False)      # salva como csv, sem os índices         #############################################
+
+
+#----Mantem proporção de valores entre as classes------
+if(compra > menor):     # caso a quantidadede 'COMPRA' não seja o menor valor
+    datasCompra = dfTratado[filtroCompra]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+    difer = compra-menor
+    for i in range(0,difer):
+        indiceCompras = ((dfTratado[dfTratado['<DATE>'] == datasCompra[i]]).index).values   # array com os índices de cada data
+        dfTratado.drop(indiceCompras, inplace=True)             # apaga os índices das datas 'datasCompra'
+
+
+if(venda > menor):     # caso a quantidadede 'VENDE' não seja o menor valor
+    datasVenda = dfTratado[filtroVenda]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'VENDA'
+    difer = venda-menor
+    for i in range(0,difer):
+        indiceVendas = ((dfTratado[dfTratado['<DATE>'] == datasVenda[i]]).index).values
+        dfTratado.drop(indiceVendas, inplace=True)
+
+
+if(lateral > menor):         # caso a quantidadede 'LATERAL' não seja o menor valor
+    datasLateral = dfTratado[filtroLateral]['<DATE>'].values  # array contendo as datas de '<OPERAÇÃO>' == 'LATERAL'
+    difer = lateral - menor
+    for i in range(0, difer):
+        indiceLateral = ((dfTratado[dfTratado['<DATE>'] == datasLateral[i]]).index).values
+        dfTratado.drop(indiceLateral, inplace=True)
+#------------------------------------------------------
+
+#------mostra quantas saidas foram geradas------
+print(f"Quantidade de rótulos após a equalização:")
+filtroCompra = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+compra = sum(filtroCompra * 1)
+print(f"QUANTIDADE DE COMPRAS: {compra}")          # mostra quantas linhas que contém o valor "John"
+filtroVenda = dfTratado['<OPERAÇÃO>'] == 'VENDA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+venda = sum(filtroVenda * 1)
+print(f"QUANTIDADE DE VENDA: {venda}")          # mostra quantas linhas que contém o valor "John"
+filtroLateral = dfTratado['<OPERAÇÃO>'] == 'LATERAL'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+lateral = sum(filtroLateral * 1)
+print(f"QUANTIDADE DE LATERAL: {lateral}")          # mostra quantas linhas que contém o valor "John"
+menor = min(compra, venda, lateral)
+#---------------------------------------------
+
+#------reorganização do dataframe-------------
+'''dfReordenado = pd.DataFrame({          # cria um dataframe com apenas uma linha
+    '<DATE>':[1],'<TIME>':[1],'<TAMANHO>':[1],'<TAMANHO NORMALIZADO>':[1],'<VARIAÇÃO DO PREÇO>':[1],
+    '<VARIAÇÃO DO PREÇO NORMALIZADO>':[1],'<PREÇO>':[1],'<VOLUME NORMALIZADO>':[1],
+    '<TAMANHO MÉDIO NORMALIZADO DAS VELAS>':[1],'<VOLUME MÉDIO NORMALIZADO DAS VELAS>':[1],
+    '<OPERAÇÃO>':[1]
+})'''
+dfReordenado = dfTratado.copy()
+tam = dfTratado.shape[0]    # quantidade de linhas do dftratado
+filtroCompra1 = dfTratado['<OPERAÇÃO>'] == 'COMPRA'   # recebe uma série contendo, "True" quando os valores da coluna "<OPERAÇÃO>" é "COMPRA", e "False" caso contrário
+filtroVenda1 = dfTratado['<OPERAÇÃO>'] == 'VENDA'
+filtroLateral1 = dfTratado['<OPERAÇÃO>'] == 'LATERAL'
+datasCompra1 = dfTratado[filtroCompra1]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+datasVenda1 = dfTratado[filtroVenda1]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+datasLateral1 = dfTratado[filtroLateral1]['<DATE>'].values      # array contendo as datas de '<OPERAÇÃO>' == 'COMPRA'
+indiceDfReordenado = dfReordenado.index.values
+cont = 0
+for i in range(0, len(datasCompra1) ):
+    indiceCompras1 = ((dfTratado[dfTratado['<DATE>'] == datasCompra1[i]]).index).values  # array com os índices de cada data
+    indiceVendas1 = ((dfTratado[dfTratado['<DATE>'] == datasVenda1[i]]).index).values  # array com os índices de cada data
+    indiceLateral1 = ((dfTratado[dfTratado['<DATE>'] == datasLateral1[i]]).index).values  # array com os índices de cada data
+    for j in range(0, len(indiceCompras1)):
+        dfReordenado.loc[[indiceDfReordenado[cont]]] = dfTratado.loc[[indiceCompras1[j]]].values
+        cont = cont+1
+    for j in range(0, len(indiceVendas1)):
+        dfReordenado.loc[[indiceDfReordenado[cont]]] = dfTratado.loc[[indiceVendas1[j]]].values
+        cont = cont+1
+    for j in range(0, len(indiceLateral1)):
+        dfReordenado.loc[[indiceDfReordenado[cont]]] = dfTratado.loc[[indiceLateral1[j]]].values
+        cont = cont+1
+#---------------------------------------------
+
 #-----Novo dataframe apenas com as linha últeis---------------------
 colunasDf = ["<TIME>", "<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>", "<OPERAÇÃO>"] # seleciona quais colunas o dataframe deve possuir
-dfLimpo = dfTratado[colunasDf].copy()
-dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ##################################################
+dfLimpo = dfReordenado[colunasDf].copy()
+
 #--------------------------------------------------------------------
 
+'''#--------visualizando o dataframe----------
+plt.boxplot(dfLimpo["<TAMANHO NORMALIZADO>"])
+plt.title("TAMANHO DA VELA")
+plt.xlabel("TAMANHO NORMALIZADO")
+plt.ylabel("VALOR")
+plt.show()
+#-----------------------------------------
+'''
+#-----verificando a correlação--------
+cor = dfLimpo.loc[:,["<PREÇO>", "<TAMANHO NORMALIZADO>", "<VARIAÇÃO DO PREÇO NORMALIZADO>", "<VOLUME NORMALIZADO>"]].corr()
+#cor.style.background_gradient(cmap='coolwarm')
+print(cor)
+#--------------------------------------
 
 #-----Gerando o dataframe para a RNA---------
 dfRna = pd.DataFrame({          # cria um dataframe com apenas uma linha
@@ -125,9 +218,13 @@ for linha, dado in dfLimpo.iterrows():
         contLinha = contLinha + 1
 
 #print((dfRna))
-dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
+dfBruto.to_excel("dfBruto.xlsx")                                #############################################################
+dfTratado.to_excel("dfTratado.xlsx")      # salva como csv, sem os índices         #############################################
 dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ###########################################
+cor.to_excel("correlação.xlsx")      # salva como csv, sem os índices      ##################################################
+dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
 dfRna.to_csv("dfRna.csv", index=False)      # salva sem os índices
+dfReordenado.to_excel("dfReordenado.xlsx")      # salva sem os índices
 
 
 
