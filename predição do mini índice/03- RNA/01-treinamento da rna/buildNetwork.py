@@ -44,7 +44,7 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs, 12, 7, 4, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
+rede = buildNetwork(nInputs, 12, 4, nOutputs,hiddenclass=TanhLayer, bias=True, outputbias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
@@ -72,7 +72,7 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.8, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.005, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=None, verbose=None, continueEpochs=30, validationProportion=0.25)
 epocas = 2000
 learning_rate = np.zeros(epocas)
@@ -84,7 +84,6 @@ for i in range(1, epocas):
 
 # imprime a matriz confusao de treinamento
 print('matriz confusao de treino: ')
-
 matrizConfusao = np.zeros((3,3))		# cria um array de duas dimensões 3x3
 for i in range(len(X_train)):
 	y_certo = np.argmax(y_train[i])				# retorna o índice (0, 1, 2, 3...)

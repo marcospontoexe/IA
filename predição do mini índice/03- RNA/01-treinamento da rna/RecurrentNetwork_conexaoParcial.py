@@ -5,11 +5,12 @@ import pybrain   # pip install https://github.com/pybrain/pybrain/archive/0.3.3.
 
 import matplotlib.pyplot as plt
 
+
 from pybrain.tools.shortcuts import buildNetwork	# usado para construir a estrutura de uma rna
-from pybrain.structure import RecurrentNetwork
+from pybrain.structure import RecurrentNetwork, IdentityConnection
 from pybrain.datasets import SupervisedDataSet		# método de aprendizagem (supervisionado)
 from pybrain.structure import FullConnection		# para fazer a conexão entre as camadas
-#from pybrain.structure import PartialConnection					# para criar conexões parciais
+from pybrain.structure.connections.connection import Connection					# para criar conexões parciais
 from pybrain.supervised.trainers import BackpropTrainer	#método de treiamento supervisionado
 #Sigmoid activation functions are used when the output of the neural network is continuous. Softmax activation functions are used when the output of the neural network is categorical.
 #https://towardsdatascience.com/activation-functions-neural-networks-1cbd9f8d91d6
@@ -66,32 +67,40 @@ rede.addModule(biasOut)				# adiciona um bias a camada de saida
 
 #-----------------configurando as conexão entre as camadas------------------
 #slicePreco = input_layer(0,3)
-slicePreco =    slice(0,5)		#cria uma fatia na camada de entrada para <PREÇO>
-sliceTamanho =  slice(11,20)		#cria uma fatia na camada de entrada para <TAMANHO NORMALIZADO>
-sliceVariacao = slice(21,26)		#cria uma fatia na camada de entrada para <VARIAÇÃO DO PREÇO NORMALIZADO>
-sliceVolume =   slice(27,31)		#cria uma fatia na camada de entrada para <VOLUME NORMALIZADO>
+#slicePreco =    slice(0,5)		#cria uma fatia na camada de entrada para <PREÇO>
+#sliceTamanho =  slice(11,20)		#cria uma fatia na camada de entrada para <TAMANHO NORMALIZADO>
+#sliceVariacao = slice(21,26)		#cria uma fatia na camada de entrada para <TAMANHO NORMALIZADO>
+#sliceVolume =   slice(27,31)		#cria uma fatia na camada de entrada para <VOLUME NORMALIZADO>
 #rede.addInputModule(slicePreco)
 #rede.addInputModule(sliceTamanho)
 #rede.addInputModule(sliceVariacao)
 #rede.addInputModule(sliceVolume)
 
-inputPreco_to_hidden = FullConnection(input_layer, hidden0, inSlice=[0,5])		#cria um modo de conexão entre a fatia de entrada e a camada oculta
+inputPreco_to_hidden = Connection(input_layer, hidden0, inSliceFrom=0, inSliceTo=7, outSliceFrom=0, outSliceTo=4) #cria uma fatia na camada de entrada para <PREÇO>
+inputTamanho_to_hidden = Connection(input_layer, hidden0, inSliceFrom=8, inSliceTo=15, outSliceFrom=5, outSliceTo=9) #cria uma fatia na camada de entrada para <TAMANHO NORMALIZADO>
+inputVariacao_to_hidden = Connection(input_layer, hidden0, inSliceFrom=16, inSliceTo=23, outSliceFrom=10, outSliceTo=14) #cria uma fatia na camada de entrada para <TAMANHO NORMALIZADO>
+inputVolume_to_hidden = Connection(input_layer, hidden0, inSliceFrom=24, inSliceTo=31, outSliceFrom=15, outSliceTo=19) #cria uma fatia na camada de entrada para <VOLUME NORMALIZADO>
+
+#inputPreco_to_hidden = FullConnection(input_layer, hidden0, inSlice=[0,5])		#cria um modo de conexão entre a fatia de entrada e a camada oculta
 #inputTamanho_to_hidden = FullConnection(input_layer, hidden0, inSlice=sliceTamanho)
 #inputVariacao_to_hidden = FullConnection(input_layer, hidden0, inSlice=slicePreco)
 #inputVolume_to_hidden = FullConnection(input_layer, hidden0, inSlice=slicePreco)
 
+#in_to_hidden0 = FullConnection(input_layer, hidden0)		# cria um modo de conexão entre camada de entrada e oculta0
 hidden0_to_hidden1 = FullConnection(hidden0, hidden1)		# cria um modo de conexão entre as camadas ocultas
 hidden1_to_output = FullConnection(hidden1, output_layer)		# cria um modo de conexão conexão entre a camada oculta e camada de saida
 biasHidden0_to_hidden0 = FullConnection(biasHidden0, hidden0) # cria um modo de conexão entre bias0 e camada oculta 0
 biasHidden1_to_hidden1 = FullConnection(biasHidden1, hidden1) # cria um modo de conexão entre bias1 e camada oculta 1
 biasOut_to_out = FullConnection(biasOut, output_layer) # cria um modo de conexão entre biasout e camada de saida
-hidden0_to_hidden0 = FullConnection(hidden0, hidden0)		# cria um modo de conexão entre as camadas ocultas 0
-hidden1_to_hidden1 = FullConnection(hidden1, hidden1)		# cria um modo de conexão entre as camadas ocultas 1
+hidden0_to_hidden0 = IdentityConnection(hidden0, hidden0)		# cria um modo de conexão entre as camadas ocultas 0 sem alteração do peso sináptico
+hidden1_to_hidden1 = IdentityConnection(hidden1, hidden1)		# cria um modo de conexão entre as camadas ocultas 1 sem alteração do peso sináptico
 
+
+#rede.addConnection(in_to_hidden0)
 rede.addConnection(inputPreco_to_hidden)			# conexão entre a camada slice de entrada e camada oculta
-#rede.addConnection(FullConnection(rede['input_layer'], rede['hidden0']))			# conexão entre a camada slice de entrada e camada oculta
-#rede.addConnection(FullConnection(rede['input_layer'], rede['hidden0']))			# conexão entre a camada slice de entrada e camada oculta
-#rede.addConnection(FullConnection(rede['input_layer'], rede['hidden0']))			# conexão entre a camada slice de entrada e camada oculta
+rede.addConnection(inputTamanho_to_hidden)			# conexão entre a camada slice de entrada e camada oculta
+rede.addConnection(inputVariacao_to_hidden)			# conexão entre a camada slice de entrada e camada oculta
+rede.addConnection(inputVolume_to_hidden)			# conexão entre a camada slice de entrada e camada oculta
 rede.addConnection(hidden0_to_hidden1)		# adidiona conexão entre as camadas ocultas
 rede.addConnection(hidden1_to_output)		# adidiona conexão entre a oculta e a saida
 rede.addConnection(biasHidden0_to_hidden0)	# adidiona conexão entre a bias e a camada oculta

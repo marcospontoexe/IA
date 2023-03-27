@@ -44,15 +44,21 @@ dfTratado['<VARIAÇÃO DO PREÇO>'] = dfBruto['<HIGH>'] - dfBruto['<LOW>']  # va
 somaTamanho = 0
 for indice, coluna in dfTratado.iterrows():
     if (coluna["<TIME>"] == "09:00:00"):    # para as velas das 9h às 16h
-        valorMax = float(dfBruto.loc[indice:indice+7, ["<HIGH>"]].max().values)    # maior preço de negociação no dia (das 9h às 16h)
-        valorMim = float(dfBruto.loc[indice:indice + 7, ["<LOW>"]].min().values)  # menor preço de negociação no dia (das 9h às 16h)
-        ivol = float(dfBruto.loc[indice:indice+7, ["<VOL>"]].max().values)# (maior volume encontrado no dia, das 9h às 16h)
-        ivar = int(dfTratado.loc[indice:indice + 7,["<VARIAÇÃO DO PREÇO>"]].max().values)  # maior variação de preço do dia das 9h às 16h
+        valorMax = float(dfBruto.loc[indice:indice + 7, ["<HIGH>"]].max().values)  # maior preço de negociação no dia (das 9h às 16h)
+        valorMin = float(dfBruto.loc[indice:indice + 7, ["<LOW>"]].min().values)  # menor preço de negociação no dia (das 9h às 16h)
+        volMax = float(dfBruto.loc[indice:indice+7, ["<VOL>"]].max().values)# (maior volume encontrado no dia, das 9h às 16h)
+        volMin = float(dfBruto.loc[indice:indice+7, ["<VOL>"]].min().values)  # (menor volume encontrado no dia, das 9h às 16h)
+        varMax = int(dfTratado.loc[indice:indice+7,["<VARIAÇÃO DO PREÇO>"]].max().values)  # maior variação de preço do dia das 9h às 16h
+        varMin = int(dfTratado.loc[indice:indice+7, ["<VARIAÇÃO DO PREÇO>"]].min().values)  # menor variação de preço do dia das 9h às 16h
+        tamMax = int(abs(dfTratado.loc[indice:indice+7, ["<TAMANHO>"]]).max().values)  # maior tamanho de vela do dia das 9h às 16h
+        tamMin = int(abs(dfTratado.loc[indice:indice+7,["<TAMANHO>"]]).min().values)  # menor tamanho de vela do dia das 9h às 16h
 
-        dfTratado.loc[indice:indice+8, ["<TAMANHO NORMALIZADO>"]] = ((dfTratado.loc[indice:indice+8, ["<TAMANHO>"]]).values) / ivar  # tamNor (normalização do tamanho da vela)
-        dfTratado.loc[indice:indice+8, ["<VARIAÇÃO DO PREÇO NORMALIZADO>"]] = (((dfTratado.loc[indice:indice+8, ["<VARIAÇÃO DO PREÇO>"]]).values)) / ivar  # varNor (normalização da variação de preço)
-        dfTratado.loc[indice:indice+8, ['<PREÇO>']] = (((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) - valorMim) / (valorMax - valorMim) # preco (valor de abertura normalizado)
-        dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = (((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values)) / ivol  # volNor (volume normalizado)
+        dfTratado.loc[indice:indice+8, ["<TAMANHO NORMALIZADO>"]] = (((dfTratado.loc[indice:indice+8, ["<TAMANHO>"]]))/abs(dfTratado.loc[indice:indice+8, ["<TAMANHO>"]])).values * (abs((dfTratado.loc[indice:indice+8, ["<TAMANHO>"]]).values) - tamMin) / (tamMax - tamMin) # tamNor (normalização do tamanho da vela)
+        dfTratado.loc[indice:indice+8, ["<VARIAÇÃO DO PREÇO NORMALIZADO>"]] = ((((dfTratado.loc[indice:indice+8, ["<VARIAÇÃO DO PREÇO>"]]).values))-varMin) / (varMax - varMin)  # varNor (normalização da variação de preço)
+        dfTratado.loc[indice:indice+8, ['<PREÇO>']] = (((dfBruto.loc[indice:indice+8, ["<OPEN>"]]).values) - valorMin) / (valorMax - valorMin) # preco (valor de abertura normalizado)
+        dfTratado.loc[indice:indice+8, ['<VOLUME NORMALIZADO>']] = ((((dfBruto.loc[indice:indice+8, ["<VOL>"]]).values)) - volMin)/ (volMax - volMin) # volNor (volume normalizado)
+
+
 
         somaTamanho = abs(dfTratado.loc[indice:indice+7, ["<TAMANHO NORMALIZADO>"]].values).sum()   # soma o valor absoluto do tamanho normalizado das velas das 9h às 16h
         somaVolume = abs(dfTratado.loc[indice:indice+7, ["<VOLUME NORMALIZADO>"]].values).sum()     # soma o valor absoluto do volume normalizado das velas das 9h às 16h
@@ -72,6 +78,8 @@ for indice, coluna in dfTratado.iterrows():
         else:
             dfTratado.loc[[indice+8],['<OPERAÇÃO>']] = 'LATERAL'
 #----------------------------------------------------
+
+dfTratado.to_excel("dfTratado.xlsx")      # salva como csv, sem os índices         #############################################
 
 #------mostra quantas saidas foram geradas------
 print(f"Quantidade de rótulos antes da equalização:")
@@ -219,7 +227,6 @@ for linha, dado in dfLimpo.iterrows():
 
 #print((dfRna))
 dfBruto.to_excel("dfBruto.xlsx")                                #############################################################
-dfTratado.to_excel("dfTratado.xlsx")      # salva como csv, sem os índices         #############################################
 dfLimpo.to_excel("dfLimpo.xlsx")      # salva como csv, sem os índices      ###########################################
 cor.to_excel("correlação.xlsx")      # salva como csv, sem os índices      ##################################################
 dfRna.to_excel("dfRna.xlsx", index=False)      # salva sem os índices
