@@ -57,13 +57,18 @@ AULA 04: https://www.youtube.com/watch?v=XzGrwHa3wGg&list=PLM8TXdmR4D2NfGVIZxXQM
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 AULA 05: https://www.youtube.com/watch?v=FY9pxsnlch0&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=5
-* modelos de treinamento:
-	- k-medias: usa a distância euclidiana para achar uma média entre as classes
-	- Grupo hierarquico:
-		- Aglomerativo.
-		- Divisivo
-* análise das variáveis:
-	-análise de componentes principais (PCA): consegue rotacionar os eixos das classes, diminuindo o n° de dimensões de entrada (from sklearn.decomposition import PCA).
+APRENDIZAGEM NÃO SUPERVISIONADA: 
+*agrupamento: 
+	-K-média: Divide o conjunto de dados em grupos. Usa a distância euclidiana para achar uma média entre as classes.
+	-agrupamento hierarquico: 
+		- Aglomerativo: cada conjunto de dados é uma classe, se unindo gradativamente até que todos estejam juntos.
+		- Divisivo: os conjuntos de dados pertencem todos à mesma classe, gradativamente vão se dividindo em novas classes.
+*seleção de variáveis (Descobre as variáveis mais importantes):
+	-análise de componentes principais (PCA): consegue rotacionar os eixos das classes, diminuindo o n° de dimensões de entrada (from sklearn.decomposition import PCA). as variáveis precisam estar normalizadas.
+
+
+	
+	
 
 -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 AULA 06: https://www.youtube.com/watch?v=sq28e_xZkZA&list=PLM8TXdmR4D2NfGVIZxXQMkhzmi3uWpA3P&index=6&t=4s
