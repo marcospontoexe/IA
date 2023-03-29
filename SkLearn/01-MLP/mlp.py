@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split    # divi o dataset em conj
 from sklearn.metrics import r2_score        # para medir a eficiencia do modelo treinado
 from sklearn.linear_model import SGDRegressor   # algorítimo de regressão linear usando a Descida do Gradiente Estocastico
 from sklearn.neural_network import MLPRegressor     # regressão com perceptron de multiplas camadas
+#from evolutionary_search import EvolutionaryAlgorithmSearchCV   # bilioteca de algoritmo genetico
 
 df  = pd.read_csv('auto-mpg.csv')
 '''
@@ -125,6 +126,21 @@ plt.legend(loc=1)
 plt.show()          #mostra o gráfico
 
 
-#--------Buscando os melhores hiperparâmetros-------
-hid0        # quantidade de enurônios na camada uculta para 
-hid1
+'''#--------Buscando os melhores hiperparâmetros-------
+hid0 = [25, 50, 100, 150, 250, 400, 500]       # possibilidades de nurônios na camada oculta0 para
+hid1 = [25, 50, 100, 150, 250, 400, 500]       # possibilidades de nurônios na camada oculta1 para
+
+paresPossiveis = []
+for n1 in hid0:
+    for n2 in hid1:
+        paresPossiveis.append((n1, n2))
+
+hyperParams = {
+    'hidden_layer_sizes' : paresPossiveis,
+    'learning_rate_init' : [0.001, 0.01, 0.1],          # taxa de aprendizagem inicial
+    'max_iter' : [2000, 5000],                   # qunidade de épocas
+    'solver' : ['sgd', 'lgbfs'],                   # método de Descida do Gradiente Estocastico
+    'tol' : [0.00000001],                   # usada para determinar o estado de cenvergencia do erro na saida
+}
+
+#algGenetico = EvolutionaryAlgorithmSearchCV(es'''
