@@ -47,9 +47,9 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 rede = RecurrentNetwork()			# cria uma rna recorrente
 	#(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
 #-----criando as camadas com seus neurônios------------------------
-input_layer = LinearLayer(nInputs)  	# cria uma camada de entrada
-hidden0 = TanhLayer(20)			# cria uma camada oculta
-hidden1 = TanhLayer(5)			# cria uma camada oculta
+input_layer = GaussianLayer(nInputs)  	# cria uma camada de entrada
+hidden0 = LinearLayer(20)			# cria uma camada oculta
+hidden1 = LinearLayer(5)			# cria uma camada oculta
 output_layer = SoftmaxLayer(nOutputs)  #cria camada de saida
 biasHidden0 = BiasUnit()			# cria um bias para a camada oculta 0
 biasHidden1 = BiasUnit()			# cria um bias para a camada oculta

@@ -23,8 +23,8 @@ np.random.seed(0)
 np.random.permutation(seed)
 #np.random.seed(seed)
 
-nInputs = 32
-hidden_layers = 9
+nInputs = 4
+hidden_layers = 4
 nOutputs = 3
 
 #importacao dos dados para aprendizado
@@ -48,8 +48,8 @@ rede = RecurrentNetwork()			# cria uma rna recorrente
 	#(nInputs,16, 10, 8,5, nOutputs, bias=True, outclass=SoftmaxLayer, outputbias=True)
 #-----criando as camadas com seus neurônios------------------------
 input_layer = LinearLayer(nInputs)  	# cria uma camada de entrada
-hidden0 = TanhLayer(20)			# cria uma camada oculta
-hidden1 = TanhLayer(5)			# cria uma camada oculta
+hidden0 = TanhLayer(hidden_layers)			# cria uma camada oculta
+hidden1 = TanhLayer(4)			# cria uma camada oculta
 output_layer = SoftmaxLayer(nOutputs)  #cria camada de saida
 biasHidden0 = BiasUnit()			# cria um bias para a camada oculta 0
 biasHidden1 = BiasUnit()			# cria um bias para a camada oculta
@@ -68,7 +68,7 @@ rede.addModule(biasOut)				# adiciona um bias a camada de saida
 #-----------------configurando as conexão entre as camadas------------------
 in_to_hidden0 = FullConnection(input_layer, hidden0)		# cria um modo de conexão entre camada de entrada e oculta0
 hidden0_to_hidden1 = FullConnection(hidden0, hidden1)		# cria um modo de conexão entre as camadas ocultas
-hidden1_to_output = FullConnection(hidden1, output_layer)		# cria um modo de conexão conexão entre a camada oculta e camada de saida
+hidden0_to_output = FullConnection(hidden0, output_layer)		# cria um modo de conexão conexão entre a camada oculta0 e camada de saida
 biasHidden0_to_hidden0 = FullConnection(biasHidden0, hidden0) # cria um modo de conexão entre bias0 e camada oculta 0
 biasHidden1_to_hidden1 = FullConnection(biasHidden1, hidden1) # cria um modo de conexão entre bias1 e camada oculta 1
 biasOut_to_out = FullConnection(biasOut, output_layer) # cria um modo de conexão entre biasout e camada de saida
@@ -77,7 +77,7 @@ hidden1_to_hidden1 = IdentityConnection(hidden1, hidden1)		# cria um modo de con
 
 rede.addConnection(in_to_hidden0)
 rede.addConnection(hidden0_to_hidden1)		# adidiona conexão entre as camadas ocultas
-rede.addConnection(hidden1_to_output)		# adidiona conexão entre a oculta e a saida
+rede.addConnection(hidden0_to_output)		# adidiona conexão entre a oculta e a saida
 rede.addConnection(biasHidden0_to_hidden0)	# adidiona conexão entre a bias e a camada oculta
 rede.addConnection(biasHidden1_to_hidden1)	#adidiona conexão entre a bias e a camada oculta
 rede.addConnection(biasOut_to_out)	#adidiona conexão entre a bias e a camada de saida
@@ -102,9 +102,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.7, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.0005, momentum = 0.8, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=250, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 2000
+epocas = 500
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)

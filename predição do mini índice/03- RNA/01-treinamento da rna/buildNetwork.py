@@ -44,7 +44,7 @@ y_train = dfTreino.iloc[:, nInputs:(nInputs+nOutputs)].values   # array com valo
 
 # Construcao da rede neural
 #rede = buildNetwork(nInputs, hidden_layers, nOutputs, bias=True, hiddenclass=TanhLayer ou LSTMLayer, outclass=SoftmaxLayer)
-rede = buildNetwork(nInputs, 18, 11, 6, nOutputs,hiddenclass=TanhLayer, outclass=SoftmaxLayer, bias=True)
+rede = buildNetwork(nInputs, 18, 11, 6, nOutputs, hiddenclass=TanhLayer, outclass=SoftmaxLayer, bias=True)
 '''When building networks with the buildNetwork shortcut, the parts are named
 automatically:
 >>> net[’in’]
@@ -72,9 +72,9 @@ for i in range(len(X_train)):
 
 
 # treinamento da rede neural pelo metodo back propagation
-treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.01, momentum = 0.06, batchlearning=False)
+treinamento = BackpropTrainer(rede, dataset = base, learningrate = 0.1, momentum = 0.7, batchlearning=False)
 #treinamento.trainUntilConvergence(maxEpochs=None, verbose=None, continueEpochs=30, validationProportion=0.25)
-epocas = 1000
+epocas = 2000
 learning_rate = np.zeros(epocas)
 for i in range(1, epocas):
     erro = treinamento.train()		# treina a rna pelo método de épocas (usar 'trainer.trainUntilConvergence()' para o método de convergência)

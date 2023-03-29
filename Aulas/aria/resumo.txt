@@ -75,13 +75,13 @@ AULA 06: https://www.youtube.com/watch?v=sq28e_xZkZA&list=PLM8TXdmR4D2NfGVIZxXQM
 	
 * Avaliação de modelos supervisionados por Classificação;
 	- Avaliação de classificadores binários: usado quando tem apenas duas classes.
-		-Matriz de confusão ou matriz de contigencia; medida de acurácia, recall ( ou cobertura, revocação ou senssibilidades), precissão
-	-Under fiting: a matriz confusão mostra desempenho ruim com as amostras de treinamento e de teste
+	- Matriz de confusão ou matriz de contigencia; medida de acurácia, recall ( ou cobertura, revocação ou senssibilidades), precissão
+	- Under fiting: a matriz confusão mostra desempenho ruim com as amostras de treinamento e de teste
 	- Over fitting: a matriz confusão mostra desempenho excelente com as amostras de treinamento e muito ruim com as de teste.
 	- froneira de decisão: é possivel ajustar a fronteira de decisão para diminuir os falsos positivos, ou falsos negativos.
 * Avaliação de modelos supervisionados por Regressão;
 	- Erro quadrático médio e erro absoluto médio; mede a distância das amostras em relação à predição calculada. 
-	-validação dos modelos
+	- validação dos modelos
 
 - Validação cruzada: dividir as amostras em várias partes, e usar subconjuntos diferentes para validação (from sklearn.model_selection import KFold). 
 - Validação cruzada extratificada: garante que as amostras de teste e treino tenham a mesma proporção de cada classe (from sklearn.model_selection import StratifieldKFold).
