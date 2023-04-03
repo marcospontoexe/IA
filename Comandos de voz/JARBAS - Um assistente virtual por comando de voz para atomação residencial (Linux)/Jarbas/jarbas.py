@@ -36,19 +36,19 @@ flag_comando = False
 cont_gravacao = 0
 '''
 os.system('sudo service mosquitto restart/')				#iniciar o broker
-os.system('sudo chmod 777 -R /sys/class/gpio/')			#da permissao p acessar a pasta gpio
+os.system('sudo chmod 777 -R /sys/class/gpio/')			#da permissao de execução para a pasta gpio
 os.system('echo 9 > /sys/class/gpio/export')			#exportar o gpio 9
 os.system('echo 10 > /sys/class/gpio/export')			#exportar o gpio 10
 os.system('echo 20 > /sys/class/gpio/export')			#exportar o gpio 20
-os.system('sudo chmod 777 -R /sys/class/gpio/gpio9')		#permissao para acessar o gpio 9
-os.system('sudo chmod 777 -R /sys/class/gpio/gpio10')		#permissao para acessar o gpio 10
-os.system('sudo chmod 777 -R /sys/class/gpio/gpio20')		#permissao para acessar o gpio 20
-os.system('echo out > /sys/class/gpio/gpio9/direction')		#configurar gpio 20 com saida
-os.system('echo out > /sys/class/gpio/gpio10/direction')	#configurar gpio 20 com saida
-os.system('echo out > /sys/class/gpio/gpio20/direction')	#configurar gpio 20 com saida
-os.system('echo 0 > /sys/class/gpio/gpio9/value')
-os.system('echo 0 > /sys/class/gpio/gpio10/value')
-os.system('echo 0 > /sys/class/gpio/gpio20/value')
+os.system('sudo chmod 777 -R /sys/class/gpio/gpio9')		#da permissao de execução para a pasta gpio9
+os.system('sudo chmod 777 -R /sys/class/gpio/gpio10')		#da permissao de execução para a pasta gpio910
+os.system('sudo chmod 777 -R /sys/class/gpio/gpio20')		#da permissao de execução para a pasta gpio920
+os.system('echo out > /sys/class/gpio/gpio9/direction')		#configurar gpio9 com saida
+os.system('echo out > /sys/class/gpio/gpio10/direction')	#configurar gpio10 com saida
+os.system('echo out > /sys/class/gpio/gpio20/direction')	#configurar gpio20 com saida
+os.system('echo 0 > /sys/class/gpio/gpio9/value')		#configurar gpio 9 com valor 0
+os.system('echo 0 > /sys/class/gpio/gpio10/value')		#configurar gpio 10 com valor 0
+os.system('echo 0 > /sys/class/gpio/gpio20/value')		#configurar gpio 20 com valor 0
 '''
 print("iniciando...")
 inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
