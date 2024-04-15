@@ -87,4 +87,4 @@ ALTERAÇÕES:
 *aplicar padronização após a normalização
 *criar entradas parcialmente conectadas: valor(N1,N5,N9...), tamanho(N2,N6,N10...), variação(N3,N7,N11...) e volume(N4,N8,N12...)
 *verificar outlyer
-*diminuir de 32 para 4 entradas
+*diminuir de 40 para 5, ou de 32 para 4 entradas
