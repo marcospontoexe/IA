@@ -7,6 +7,8 @@ Neste trabalho foi desenvolvido um assistente virtual embarcado em uma placa de 
 Para realizar a gravação dos voluntários, foi usado o código [Banco_Dados.py](https://github.com/marcospontoexe/IA/tree/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/Banco%20de%20dados). Este código grava automaticamente três áudios de dois segundos para cada 
 comando, com uma frequência de amostragem de 16000 bits por segundo. Os audios são salvos dentro da pasta em que se encontra o código "Banco_Dados.py", por tanto é necessário criar pastas distintas para 
 cada comando gravado.
+
+
   No terminal do linux digitar "arecord -l", para verificar o card e o device 
 da entrada de som, para usar como parâmentro do comando "arecord".
 Para fazer alterações no alsamixer, use o comando "sudo alsamixer" no terminal do linux,
