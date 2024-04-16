@@ -30,3 +30,18 @@ Caso esteja utilizando uma máquina virtual, certifique-se de que as entradas de
 áudio estejam habilitadas e configuradas corretamente, de acordo com seu hardware.
 Para teste de entrada de áudio, pode ser usado o audacity para realizar gravações
 de teste.
+
+
+É importante que ao final da gravação de voz, todos os audios sejam analisados para descartar as amostras inadequadas; aúdios cortados, aúdios inaudíveis, comandos incorretos...
+
+
+### Tratamento do banco de dados
+
+
+### Filtro MFCC
+
+
+### Treino da RNA
+
+
+### Jarbas
