@@ -36,7 +36,15 @@ de teste.
 
 
 ### Tratamento do banco de dados
+A fim de reduzir a quantidade nos neurônios de entrada da RNA, tornando esta mais rápida e eficiente, os audios gravados com duração de dois segundos ,que contém passam por algumas etapas de pré processamento; 
 
+
+#### pré enfase
+A pré-ênfase é usada para eliminar uma tendência espectral de aproximadamente -
+6dB/oitava na fala, irradiada dos lábios. Essa compensação na atenuação pode ser aplicada
+através de um **filtro FIR de primeira ordem**, de resposta aproximadamente +6dB/oitava, ocasionando um nivelamento no espectro. Enfatizando a porção do espectro mais distante da frequência
+fundamental. A imagem a baixo mostra o comando de áudio "Jarbas"sem o filtro de pré-ênfase no
+primeiro gráfico, e o áudio filtrado no segundo gráfico.
 
 ### Filtro MFCC
 
