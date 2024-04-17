@@ -36,7 +36,7 @@ de teste.
 
 
 ### Tratamento do banco de dados
-A fim de reduzir a quantidade nos neurônios de entrada da RNA, tornando esta mais rápida e eficiente, os audios gravados com duração de dois segundos, que contém 32000 amostras, passam por algumas etapas de pré processamento; **pré-enfase**, **normalização**, **segmentação do audio**, **MFCC**. 
+A fim de reduzir a quantidade nos neurônios de entrada da RNA, tornando esta mais rápida e eficiente, os audios gravados com duração de dois segundos, que contém 32000 amostras, passam por algumas etapas de pré processamento; **pré-enfase**, **normalização**, **segmentação do audio**, filtro **MFCC** (*MEL FREQUENCY CEPSTRAL COEFICIENTE*). 
 
 
 #### pré enfase
@@ -45,6 +45,7 @@ A pré-ênfase é usada para eliminar uma tendência espectral de aproximadament
 através de um **filtro FIR de primeira ordem**, de resposta aproximadamente +6dB/oitava, ocasionando um nivelamento no espectro. Enfatizando a porção do espectro mais distante da frequência
 fundamental. A imagem a baixo mostra o comando de áudio "Jarbas"sem o filtro de pré-ênfase no
 primeiro gráfico, e o áudio filtrado no segundo gráfico.
+
 ![Filtro de pré-enfase](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/pr%C3%A9%20enfase.png)
 
 
@@ -70,7 +71,20 @@ A figura a baixo mostra a segmentação do comando "jarbas". No primeiro gráfic
 ![Processo de segmentação do áudio](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/segmentador.png).
 
 ### Filtro MFCC
+Para alimentar uma RNA para reconhecimento de comandos vocálicos adequadamente, é necessário descartar componentes irrelevantes daquele padrão vocálico analisado, como por exemplo; ruído de fundo, emoção, gênero, entre outras características desnecessárias, tornando o processamento mais rápido e o reconhecimento mais eficiente. 
 
+
+A extração usando MFCC é baseada em duas características da audição humana: a resposta em frequência da membrana basilar, onde existe uma banda crítica (leia a seção [2.4](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial.pdf)) é também a característica de excitações de compressão não lineares do nervo
+auditivo, geralmente é necessário 8 vezes mais energia para dobrar a intensidade de um sinal de
+áudio.
+
+Após o audio segmentado (com 17600 amostras) ser processado pelo código [mfcc.py](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/Tratamento%20do%20banco%20de%20dados%20e%20filtro%20mfcc/mfcc.py), passou a ter apenas 130 amostras, que serão fornecidas à camada de entrada de RNA. Essas 130 amostras são as componentes cepstrais, que contém informação sobre a energia encontrada nas frequências que compõem aquele sinal de áudio.
+
+
+Ao final do processo defiltragem MFCC, o código "mfcc.py" gera um arquivo .CSV contendo todos as componentes cepstrais de cada comando, que será usado para treinar a RNA.
+
+
+Leia a seção [2.6 e 3.4](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial.pdf) para mais detalhes do algoritmo **MFCC**.
 
 ### Treino da RNA
 
