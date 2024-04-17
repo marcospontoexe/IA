@@ -65,7 +65,7 @@ proporção do pico de energia daquele comando de áudio. Para cada áudio anali
 Após o áudio ser processador pelo **segmentador.py**, passou de 32000 para 17600 amostras. Para mais detalhes do código **segmentador.py** leia a seção 3.3.3 do pdf [JARBAS - Um assistente virtual por comando de voz para atomação residencial](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial.pdf).
 
 
-A figura a baixo mostra a segmentação do comando "jarbas". No primeiro gráfico a energia ao longo do tempo, no segundo gráfico o áudio original,
+A figura a baixo mostra a segmentação do comando "jarbas". No primeiro gráfico a energia ao longo do tempo, no segundo gráfico o áudio original, no terceiro gráfico a região não falada está zerada, no quarto gráfico o aúdio segmentado.
 ![Processo de segmentação do áudio](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/segmentador.png).
 
 ### Filtro MFCC
