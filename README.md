@@ -45,6 +45,7 @@ A pré-ênfase é usada para eliminar uma tendência espectral de aproximadament
 através de um **filtro FIR de primeira ordem**, de resposta aproximadamente +6dB/oitava, ocasionando um nivelamento no espectro. Enfatizando a porção do espectro mais distante da frequência
 fundamental. A imagem a baixo mostra o comando de áudio "Jarbas"sem o filtro de pré-ênfase no
 primeiro gráfico, e o áudio filtrado no segundo gráfico.
+![Filtro de pré-enfase](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/pr%C3%A9%20enfase.png)
 
 ### Filtro MFCC
 
