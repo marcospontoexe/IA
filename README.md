@@ -36,7 +36,7 @@ de teste.
 
 
 ### Tratamento do banco de dados
-A fim de reduzir a quantidade nos neurônios de entrada da RNA, tornando esta mais rápida e eficiente, os audios gravados com duração de dois segundos ,que contém passam por algumas etapas de pré processamento; 
+A fim de reduzir a quantidade nos neurônios de entrada da RNA, tornando esta mais rápida e eficiente, os audios gravados com duração de dois segundos, que contém 32000 amostras, passam por algumas etapas de pré processamento; **pré-enfase**, **normalização**, **segmentação do audio**, **MFCC**. 
 
 
 #### pré enfase
@@ -46,6 +46,26 @@ através de um **filtro FIR de primeira ordem**, de resposta aproximadamente +6d
 fundamental. A imagem a baixo mostra o comando de áudio "Jarbas"sem o filtro de pré-ênfase no
 primeiro gráfico, e o áudio filtrado no segundo gráfico.
 ![Filtro de pré-enfase](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/pr%C3%A9%20enfase.png)
+
+
+#### Normalização
+A normalização é um processo em que o sinal de áudio passa por um ajuste de amplitude, fixando um valor de ganho máximo pretendido, neste caso entre -1 e 1, evitando problemas de convergência. Ter todas as características em uma escala similar pode evitar que algumas características dominem o processo de aprendizado. 
+
+
+#### Segmentação do áudio
+A segmentação do áudio é utilizada para selecionar as principais informações do sinal, separando o comando dito, de regiões de silêncio, que não contém informação alguma sobre o comando de áudio.
+Para isso, foi desenvolvido um [algoritmo de segmentação](https://github.com/marcospontoexe/IA/tree/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/Tratamento%20do%20banco%20de%20dados%20e%20filtro%20mfcc) "segmentador.py" **baseado na energia contida no comando falado**, já que a região não falada possui apenas ruído de fundo, em que a energia é muito baixa.
+
+
+A lógica por trás do algoritmo é detectar o início do comando a partir do limiar inferior
+de energia, que separa a região de silencio da região de fala. O limiar inferior de energia é uma
+proporção do pico de energia daquele comando de áudio. Para cada áudio analisado, o valor do limiar inferior de energia é alterado em função do pico de energia daquele áudio, dando dinâmica ao algoritmo de segmentação na determinação do início do comando falado. Em ambientes ruidosos basta que o usuário fale mais alto, assim o limiar inferior de energia também aumenta.
+
+
+Após o áudio ser processador pelo **segmentador.py**, passou de 32000 para 17600 amostras. Para mais detalhes do código **segmentador.py** leia a seção 3.3.3 do pdf [JARBAS - Um assistente virtual por comando de voz para atomação residencial](https://github.com/marcospontoexe/IA/tree/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial).
+
+
+A figura a baixo mostra a segmentação do comando "jarbas". No primeiro gráfico a energia ao longo do tempo, no segundo gráfico o áudio original,
 
 ### Filtro MFCC
 
