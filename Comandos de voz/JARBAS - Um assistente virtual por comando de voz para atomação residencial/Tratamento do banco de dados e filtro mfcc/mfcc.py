@@ -7,6 +7,7 @@ import os
 from python_speech_features import mfcc
 from python_speech_features import delta
 from python_speech_features import logfbank
+from segmentador import segmentarAudio 
 
 quantidadeComandos = 10 # determina a quantidade de comandos, para este projeto existem 10 comandos
 inicioTreino = 1        # valor inicial dos comandos usados para treinamento da rna
@@ -56,10 +57,15 @@ for comando in range(quantidadeComandos):
 
         # normalização do amplitude de 15 bits. Isso deixa a amplitude entre um intervalo de 1 e -1
         xi = xi / 32768.0
+
         
 
         x = []
         x = np.append(xi[0], xi[1:] - 0.97 * xi[:-1])  # filtro de pre-enfase
+
+        
+        x = segmentarAudio(x) # recebe o audio segmentado
+        
 
         win = 3200
         step = 800

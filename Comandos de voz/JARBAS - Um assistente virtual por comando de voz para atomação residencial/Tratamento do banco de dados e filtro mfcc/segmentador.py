@@ -3,7 +3,7 @@ import numpy as np
 import scipy.io.wavfile as wav
 import os
 
-def segmentador(audio):
+def segmentarAudio(audio):
     """
     Essa função segmenta um aúdio, separando a região de fala da região de silenciosa.
     :param audio: Áudio a ser tratado.
@@ -119,16 +119,16 @@ def segmentador(audio):
     plt.subplot(4, 1, 1)
     plt.plot(energy)
     plt.subplot(4, 1, 2)
-    plt.plot(x)
+    plt.plot(xi)
     plt.subplot(4, 1, 3)
-    plt.plot(y)
+    plt.plot(x)
     plt.subplot(4, 1, 4)
-    plt.plot(z)
+    plt.plot(y)
     plt.show()
 
     return z
 
-
+'''
 diretorio_atual = os.path.dirname(os.path.realpath(__file__))  # Diretório do script atual
 # Diretório pai do diretório atual
 diretorio_pai = os.path.dirname(diretorio_atual)
@@ -175,8 +175,9 @@ for comando in range(10):
 
         x = []
         x = np.append(xi[0], xi[1:] - 0.97 * xi[:-1])  # filtro de pre-enfase
-        seg = segmentador(x)
+        seg = segmentarAudio(x)
 
         plt.subplot(4, 1, 1)
         plt.plot(seg)
         plt.show()
+'''
