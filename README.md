@@ -66,6 +66,7 @@ Após o áudio ser processador pelo **segmentador.py**, passou de 32000 para 176
 
 
 A figura a baixo mostra a segmentação do comando "jarbas". No primeiro gráfico a energia ao longo do tempo, no segundo gráfico o áudio original, no terceiro gráfico a região não falada está zerada, no quarto gráfico o aúdio segmentado.
+
 ![Processo de segmentação do áudio](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/segmentador.png).
 
 ### Filtro MFCC
