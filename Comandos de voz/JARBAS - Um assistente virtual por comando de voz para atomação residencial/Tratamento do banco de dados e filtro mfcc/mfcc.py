@@ -8,7 +8,21 @@ from python_speech_features import mfcc
 from python_speech_features import delta
 from python_speech_features import logfbank
 
-pasta = '../../Banco_de_palavras'
+quantidadeComandos = 10 # determina a quantidade de comandos, para este projeto existem 10 comandos
+inicioTreino = 1        # valor inicial dos comandos usados para treinamento da rna
+finalTreino = 2         # valor final dos comandos usados para treinamento da rna
+inicioTeste = 3         # valor inicial dos comandos usados para validação da rna
+finalTeste = 4          # valor final dos comandos usados para validação da rna
+
+diretorio_atual = os.path.dirname(os.path.realpath(__file__))  # Diretório do script atual
+# Diretório pai do diretório atual
+diretorio_pai = os.path.dirname(diretorio_atual)
+# Diretório avó do diretório pai
+diretorio_avo = os.path.dirname(diretorio_pai)
+pasta = f"{diretorio_avo}/Banco_de_palavras"
+
+# pasta = '../../Banco_de_palavras'
+
 for comando in range(10):
     if (comando == 0):
         comando_aux = f'{pasta}/10-Jarbas'
@@ -30,7 +44,7 @@ for comando in range(10):
         comando_aux = f"{pasta}/18-TV"
     if (comando == 9):
         comando_aux = f"{pasta}/19-Café"
-    # 10, 76
+    
     # número de amostras de áudio contida em cada pasta de comando (Ligue, Desligue, Jarbas...)
     for speaker in range(51, 61):
         audio = f'{comando_aux}/{speaker}.wav'
@@ -130,9 +144,10 @@ for comando in range(10):
 
         chunks = 10
         tempo_total = (float)(len(z_norm))/fs
+        quantidadeCoeficienteMFCC = 13 # cada coeficiente possui a energia de uma faixa de frequencia
 
         # mfcc_feat = mfcc(z_norm,fs,winlen=tempo_total/chunks,winstep=tempo_total/#chunks,numcep=13,nfilt=40,nfft=16384,lowfreq=50,preemph=0,appendEnergy=True)
-        mfcc_feat = mfcc(z_norm, fs, winlen=tempo_total/chunks, winstep=tempo_total/chunks, numcep=13,
+        mfcc_feat = mfcc(z_norm, fs, winlen=tempo_total/chunks, winstep=tempo_total/chunks, numcep=quantidadeCoeficienteMFCC,
                          nfilt=26, nfft=16384, lowfreq=50, preemph=0, appendEnergy=True, winfunc=np.hamming)
         # mfccMax = np.max(np.abs(mfcc_feat))
         # print(f"mfcc_feat max: {mfccMax}")
@@ -150,7 +165,7 @@ for comando in range(10):
 
         # transformando a matriz de 13x10 amostras, em um vetor de uma dimensão apenas, com 130 amostras.
         for i in range(0, chunks):
-            for j in range(0, 13):
+            for j in range(0, quantidadeCoeficienteMFCC):
                 sys.stdout.write(str(mfcc_norm[i][j]))
                 sys.stdout.write(';')
 

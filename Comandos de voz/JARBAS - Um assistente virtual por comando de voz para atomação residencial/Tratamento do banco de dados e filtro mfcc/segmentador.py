@@ -4,8 +4,7 @@ import scipy.io.wavfile as wav
 import os
 
 
-diretorio_atual = os.path.dirname(
-    os.path.realpath(__file__))  # Diretório do script atual
+diretorio_atual = os.path.dirname(os.path.realpath(__file__))  # Diretório do script atual
 # Diretório pai do diretório atual
 diretorio_pai = os.path.dirname(diretorio_atual)
 # Diretório avó do diretório pai
@@ -13,7 +12,15 @@ diretorio_avo = os.path.dirname(diretorio_pai)
 pasta = f"{diretorio_avo}/Banco_de_palavras"
 
 # pasta = '../../Banco_de_palavras'
-for comando in range(10):  # percorre as 10 pastas
+
+
+quantidadeComandos = 10 # determina a quantidade de comandos, para este projeto existem 10 comandos
+inicioTreino = 1        # valor inicial dos comandos usados para treinamento da rna
+finalTreino = 2         # valor final dos comandos usados para treinamento da rna
+inicioTeste = 3         # valor inicial dos comandos usados para validação da rna
+finalTeste = 4          # valor final dos comandos usados para validação da rna
+
+for comando in range(quantidadeComandos):  # percorre as 10 pastas
     if (comando == 0):
         comando_aux = f'{pasta}/10-Jarbas'
     if (comando == 1):
@@ -36,23 +43,26 @@ for comando in range(10):  # percorre as 10 pastas
         comando_aux = f"{pasta}/19-Café"
 
     # número de amostras de áudio contida em cada pasta de comando (Ligue, Desligue, Jarbas...)
-    for speaker in range(1, 20):
+    for speaker in range(inicioTreino, finalTreino):
         audio = f'{comando_aux}/{speaker}.wav'
+        # z = segmentador(audio)
         [fs, xi] = wav.read(audio)
-        print(f"fs: {fs}")
-        print(f"type(xi): {type(xi)}")
-        # normalização do amplitude de 16 bits. Isso deixa a amplitude entre um intervalo de 1 e -1
-        xi = xi / 32768.0
+        # print(f"fs: {fs}")
+        # print(f"type(xi): {type(xi)}")
+
         # Muitos microprocessadores causam um estalo no início da gravação, atingindo a máxima amplitude
         estalo = 100
         xi[0:estalo] = 0  # zera as primeiras 100 amostras do audio
+
+        # normalização do amplitude de 16 bits. Isso deixa a amplitude entre um intervalo de 1 e -1
+        xi = xi / 32768.0
 
         x = []
         x = np.append(xi[0], xi[1:] - 0.97 * xi[:-1])  # filtro de pre-enfase
 
         # n = np.arange(0, len(x))
 
-        print('speaker: ' + str(speaker))
+        # print('speaker: ' + str(speaker))
 
         win = 3200
         step = 800
@@ -72,22 +82,24 @@ for comando in range(10):  # percorre as 10 pastas
         iMin = np.argmin(energy)  # índice com o menor valor de energy
         # Menor valor de energia, usado para achar o limiar entre região de fala e de  silencio
         vMin = energy[iMin]
-        print(f"iMin; {iMin}")
+        # print(f"iMin; {iMin}")
 
         # calcula o limiar inferior de energia
         A = 0.03
         B = 0.09
         lim_inferior = A*vMax
 
+        '''
         print('indice da energia maxima: ' + str(iMax))
         print('ENERGIA MÁXIMA: ' + str(vMax))
         print('indice da energia minima: ' + str(iMin))
         print('ENERGIA minima: ' + str(vMin))
         print('limiar inferior de energia: '+str(lim_inferior))
+        '''
 
         if vMin > lim_inferior:  # caso tenha muito ruido de fundo
             lim_inferior = vMin + ((vMax - vMin) * B)
-            print(f"lim_inferior_2 {lim_inferior}")
+            # print(f"lim_inferior_2 {lim_inferior}")
 
         # a variável silencio verefica se a veriável energy é menor que o lim_inferior
         silencio = 0
@@ -115,9 +127,10 @@ for comando in range(10):  # percorre as 10 pastas
             start = (start*step)+win
 
         stop = start+17600
-        if (stop > 32000):
+        if (stop > 32000):  # O tamanho máximo do áudio é de 32000 amostras
             stop = 32000
 
+        # vetor com a região de silencio zerada
         y = np.zeros(len(x))
         for i in range(start, stop):
             y[i] = x[i]
@@ -128,17 +141,20 @@ for comando in range(10):  # percorre as 10 pastas
         # for i in range(0,len(z)):
         for i in range(0, (stop-start)):
             z[i] = y[i+start]
-        print(f"len(z): {len(z)}")
+        # print(f"len(z): {len(z)}")
 
         '''
-    som = f'aplay {audio}'
-    os.system(som)
-            '''
+        som = f'aplay {audio}'
+        os.system(som)
+        '''
+
+        '''
         print('start: '+str(start))
         print('stop: '+str(stop))
         print('\n')
+        '''
 
-    # imprime os gŕaficos do vetor de energia, além do audio original, áudio apenas com a regiaão falada, e finalmente o audio segmentado
+        # imprime os gŕaficos do vetor de energia, além do audio original, áudio apenas com a regiaão falada, e finalmente o audio segmentado
         plt.subplot(4, 1, 1)
         plt.plot(energy)
         plt.subplot(4, 1, 2)

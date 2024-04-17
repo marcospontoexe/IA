@@ -32,7 +32,7 @@ Para teste de entrada de áudio, pode ser usado o audacity para realizar gravaç
 de teste.
 
 
-É importante que ao final da gravação de voz, todos os audios sejam analisados para descartar as amostras inadequadas; aúdios cortados, aúdios inaudíveis, comandos incorretos...
+É importante que ao final da gravação de voz, todos os audios sejam analisados para descartar as amostras inadequadas; aúdios cortados, aúdios inaudíveis e comandos incorretos. Ao termino da execução do código "Banco_Dados.py" serão gerados um total de 30 comandos (10 comandos x 3 repetições para cada comando). Os comandos devem ser armazenados em seus devidos diretórios, totalizando dez diretórios. Os comandos em cada diretório deveram ser renomeados com números inteiros positivo; 1, 2, 3, 4, 5 e assim por diante, para que possam ser lidos pelo código segmentador de audio, discutido a diante.
 
 
 ### Tratamento do banco de dados
@@ -68,7 +68,9 @@ Após o áudio ser processador pelo **segmentador.py**, passou de 32000 para 176
 
 A figura a baixo mostra a segmentação do comando "jarbas". No primeiro gráfico a energia ao longo do tempo, no segundo gráfico o áudio original, no terceiro gráfico a região não falada está zerada, no quarto gráfico o aúdio segmentado.
 
-![Processo de segmentação do áudio](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/segmentador.png).
+![Processo de segmentação do áudio](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/imagens/segmentador.png). 
+
+
 
 ### Filtro MFCC
 Para alimentar uma RNA para reconhecimento de comandos vocálicos adequadamente, é necessário descartar componentes irrelevantes daquele padrão vocálico analisado, como por exemplo; ruído de fundo, emoção, gênero, entre outras características desnecessárias, tornando o processamento mais rápido e o reconhecimento mais eficiente. 
@@ -81,7 +83,7 @@ auditivo, geralmente é necessário 8 vezes mais energia para dobrar a intensida
 Após o audio segmentado (com 17600 amostras) ser processado pelo código [mfcc.py](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/Tratamento%20do%20banco%20de%20dados%20e%20filtro%20mfcc/mfcc.py), passou a ter apenas 130 amostras, que serão fornecidas à camada de entrada de RNA. Essas 130 amostras são as componentes cepstrais, que contém informação sobre a energia encontrada nas frequências que compõem aquele sinal de áudio.
 
 
-Ao final do processo defiltragem MFCC, o código "mfcc.py" gera um arquivo .CSV contendo todos as componentes cepstrais de cada comando, que será usado para treinar a RNA.
+Ao final do processo defiltragem MFCC, o código "mfcc.py" gera dois arquivos .CSV contendo todos as componentes cepstrais de cada comando. O arquivo chamado "treino.csv" será usado para treinar a RNA, e o arquivo "teste.csv" será usado para a validação da RNA.
 
 
 Leia a seção [2.6 e 3.4](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial.pdf) para mais detalhes do algoritmo **MFCC**.
