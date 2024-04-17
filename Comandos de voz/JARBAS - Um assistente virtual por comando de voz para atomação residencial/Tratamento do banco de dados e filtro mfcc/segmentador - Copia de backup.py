@@ -1,18 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.io.wavfile as wav
-import sys
 import os
-# (pip install python_speech_features==0.6)
-from python_speech_features import mfcc
-from python_speech_features import delta
-from python_speech_features import logfbank
 
-quantidadeComandos = 10 # determina a quantidade de comandos, para este projeto existem 10 comandos
-inicioTreino = 1        # valor inicial dos comandos usados para treinamento da rna
-finalTreino = 2         # valor final dos comandos usados para treinamento da rna
-inicioTeste = 3         # valor inicial dos comandos usados para validação da rna
-finalTeste = 4          # valor final dos comandos usados para validação da rna
 
 diretorio_atual = os.path.dirname(os.path.realpath(__file__))  # Diretório do script atual
 # Diretório pai do diretório atual
@@ -23,7 +13,14 @@ pasta = f"{diretorio_avo}/Banco_de_palavras"
 
 # pasta = '../../Banco_de_palavras'
 
-for comando in range(quantidadeComandos):
+
+quantidadeComandos = 10 # determina a quantidade de comandos, para este projeto existem 10 comandos
+inicioTreino = 1        # valor inicial dos comandos usados para treinamento da rna
+finalTreino = 2         # valor final dos comandos usados para treinamento da rna
+inicioTeste = 3         # valor inicial dos comandos usados para validação da rna
+finalTeste = 4          # valor final dos comandos usados para validação da rna
+
+for comando in range(quantidadeComandos):  # percorre as 10 pastas
     if (comando == 0):
         comando_aux = f'{pasta}/10-Jarbas'
     if (comando == 1):
@@ -44,22 +41,28 @@ for comando in range(quantidadeComandos):
         comando_aux = f"{pasta}/18-TV"
     if (comando == 9):
         comando_aux = f"{pasta}/19-Café"
-    
+
     # número de amostras de áudio contida em cada pasta de comando (Ligue, Desligue, Jarbas...)
     for speaker in range(inicioTreino, finalTreino):
         audio = f'{comando_aux}/{speaker}.wav'
+        # z = segmentador(audio)
         [fs, xi] = wav.read(audio)
+        # print(f"fs: {fs}")
+        # print(f"type(xi): {type(xi)}")
 
         # Muitos microprocessadores causam um estalo no início da gravação, atingindo a máxima amplitude
         estalo = 100
         xi[0:estalo] = 0  # zera as primeiras 100 amostras do audio
 
-        # normalização do amplitude de 15 bits. Isso deixa a amplitude entre um intervalo de 1 e -1
+        # normalização do amplitude de 16 bits. Isso deixa a amplitude entre um intervalo de 1 e -1
         xi = xi / 32768.0
-        
 
         x = []
         x = np.append(xi[0], xi[1:] - 0.97 * xi[:-1])  # filtro de pre-enfase
+
+        # n = np.arange(0, len(x))
+
+        # print('speaker: ' + str(speaker))
 
         win = 3200
         step = 800
@@ -79,11 +82,20 @@ for comando in range(quantidadeComandos):
         iMin = np.argmin(energy)  # índice com o menor valor de energy
         # Menor valor de energia, usado para achar o limiar entre região de fala e de  silencio
         vMin = energy[iMin]
+        # print(f"iMin; {iMin}")
 
         # calcula o limiar inferior de energia
         A = 0.03
         B = 0.09
         lim_inferior = A*vMax
+
+        '''
+        print('indice da energia maxima: ' + str(iMax))
+        print('ENERGIA MÁXIMA: ' + str(vMax))
+        print('indice da energia minima: ' + str(iMin))
+        print('ENERGIA minima: ' + str(vMin))
+        print('limiar inferior de energia: '+str(lim_inferior))
+        '''
 
         if vMin > lim_inferior:  # caso tenha muito ruido de fundo
             lim_inferior = vMin + ((vMax - vMin) * B)
@@ -129,73 +141,26 @@ for comando in range(quantidadeComandos):
         # for i in range(0,len(z)):
         for i in range(0, (stop-start)):
             z[i] = y[i+start]
+        # print(f"len(z): {len(z)}")
 
-        # tratamento do sinal pos segmentacao
-        # normalizacao de amplitude do áudio segmentado, entre -1 e 1
-        z_norm = z / np.max(np.abs(z))
-        zMax = np.max(np.abs(z_norm))
-        # print(f"z_norm maior: {zMax}")
-        # print(f"z_norm len: {len(z_norm)}")
-        # print(f"z_norm tipo: {type(z_norm)}")
+        '''
+        som = f'aplay {audio}'
+        os.system(som)
+        '''
 
-        # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        # extracao de caracteristicas cepstrais de cada audio
-        '''aqui o sinal passa pela função mfcc. O sinal é dividido em chunks, 10 pedacos do mesmo tamanho.
-		cada pedaço  é filtrado por 13 filtros da escala MEL, extraindo caracteristicas desse audio, que estão
-		relacionadas com o espectro de frequência. Resultando em 130 amostras de um sinal de áudio que 
-		continha 32000 amostras.'''
+        '''
+        print('start: '+str(start))
+        print('stop: '+str(stop))
+        print('\n')
+        '''
 
-        chunks = 10
-        tempo_total = (float)(len(z_norm))/fs
-        quantidadeCoeficienteMFCC = 13 # cada coeficiente possui a energia de uma faixa de frequencia
-
-        # mfcc_feat = mfcc(z_norm,fs,winlen=tempo_total/chunks,winstep=tempo_total/#chunks,numcep=13,nfilt=40,nfft=16384,lowfreq=50,preemph=0,appendEnergy=True)
-        mfcc_feat = mfcc(z_norm, fs, winlen=tempo_total/chunks, winstep=tempo_total/chunks, numcep=quantidadeCoeficienteMFCC,
-                         nfilt=26, nfft=16384, lowfreq=50, preemph=0, appendEnergy=True, winfunc=np.hamming)
-        # mfccMax = np.max(np.abs(mfcc_feat))
-        # print(f"mfcc_feat max: {mfccMax}")
-        # print(f"mfcc_feat : {mfcc_feat}")
-        # print(f"mfcc_feat len: {len(mfcc_feat)}")
-        # print(f"mfcc_feat tipo: {type(mfcc_feat)}")
-
-        # normaliza os valores cepstrais entre 1 e -1
-        mfcc_norm = mfcc_feat / np.max(np.abs(mfcc_feat))
-        # mfccMax_norm = np.max(np.abs(mfcc_norm))
-        # print(f"mfcc_norm : {mfcc_norm}")
-        # print(f"mfcc_norm maior: {mfccMax_norm}")
-        # print(f"mfcc_norm len: {len(mfcc_norm)}")
-        # print(f"mfcc_norm tipo: {type(mfcc_norm)}")
-
-        # transformando a matriz de 13x10 amostras, em um vetor de uma dimensão apenas, com 130 amostras.
-        for i in range(0, chunks):
-            for j in range(0, quantidadeCoeficienteMFCC):
-                sys.stdout.write(str(mfcc_norm[i][j]))
-                sys.stdout.write(';')
-
-        if (comando == 0):
-            sys.stdout.write('1;0;0;0;0;0;0;0;0;0;')
-        if (comando == 1):
-            sys.stdout.write('0;1;0;0;0;0;0;0;0;0;')
-        if (comando == 2):
-            sys.stdout.write('0;0;1;0;0;0;0;0;0;0;')
-        if (comando == 3):
-            sys.stdout.write('0;0;0;1;0;0;0;0;0;0;')
-        if (comando == 4):
-            sys.stdout.write('0;0;0;0;1;0;0;0;0;0;')
-        if (comando == 5):
-            sys.stdout.write('0;0;0;0;0;1;0;0;0;0;')
-        if (comando == 6):
-            sys.stdout.write('0;0;0;0;0;0;1;0;0;0;')
-        if (comando == 7):
-            sys.stdout.write('0;0;0;0;0;0;0;1;0;0;')
-        if (comando == 8):
-            sys.stdout.write('0;0;0;0;0;0;0;0;1;0;')
-        if (comando == 9):
-            sys.stdout.write('0;0;0;0;0;0;0;0;0;1;')
-
-        print('')  # escreve as pŕoximas saidas na linha seguinte
-
-'''O comando "comm > nome_do_arquivo.csv" deverá ser usado no terminal,
-afim de gravar as saidas da função "sys.stdout.write()" em um arqui .csv
-exemplo: python3 mfcc.py comm > terino.csv
-'''
+        # imprime os gŕaficos do vetor de energia, além do audio original, áudio apenas com a regiaão falada, e finalmente o audio segmentado
+        plt.subplot(4, 1, 1)
+        plt.plot(energy)
+        plt.subplot(4, 1, 2)
+        plt.plot(x)
+        plt.subplot(4, 1, 3)
+        plt.plot(y)
+        plt.subplot(4, 1, 4)
+        plt.plot(z)
+        plt.show()
