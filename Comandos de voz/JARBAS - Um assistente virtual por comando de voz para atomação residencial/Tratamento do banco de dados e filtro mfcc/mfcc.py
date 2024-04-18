@@ -8,6 +8,7 @@ from python_speech_features import mfcc
 from python_speech_features import delta
 from python_speech_features import logfbank
 from segmentador import segmentarAudio 
+import csv  # para gerar csv
 
 linhas = [] # lista para armazenar os valores finais de cada comando
 tabela = []  # lista para armazenar os valores de todos os comandos
@@ -105,7 +106,7 @@ for comando in range(quantidadeComandos):
         for i in range(0, chunks):
             for j in range(0, quantidadeCoeficienteMFCC):
                 linhas.append(mfcc_norm[i][j])
-                linhas.append(';')
+                #linhas.append(';')
                 sys.stdout.write(str(mfcc_norm[i][j]))
                 sys.stdout.write(';')
 
@@ -140,10 +141,17 @@ for comando in range(quantidadeComandos):
             sys.stdout.write('0;0;0;0;0;0;0;0;0;1;')
             linhas.append('0;0;0;0;0;0;0;0;0;1;')
 
-        print('')  # escreve as pŕoximas saidas na linha seguinte
+        #print('')  # escreve as pŕoximas saidas na linha seguinte
         linhas.append('')
         tabela.append(linhas[:])
         linhas.clear()
+        #print("tebela")
+        #print(tabela[0])
+    
+# Escrevendo os dados do array para o arquivo CSV 
+with open("treinocsvteste", 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile, delimiter=';')
+    writer.writerows(tabela)
 
 '''O comando "comm > nome_do_arquivo.csv" deverá ser usado no terminal,
 afim de gravar as saidas da função "sys.stdout.write()" em um arqui .csv
