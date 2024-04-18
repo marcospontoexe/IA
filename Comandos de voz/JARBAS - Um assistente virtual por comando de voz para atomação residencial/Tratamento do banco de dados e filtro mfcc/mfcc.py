@@ -20,10 +20,8 @@ inicioTeste = 3         # valor inicial dos comandos usados para validação da 
 finalTeste = 4          # valor final dos comandos usados para validação da rna
 
 diretorio_atual = os.path.dirname(os.path.realpath(__file__))  # Diretório do script atual
-# Diretório pai do diretório atual
-diretorio_pai = os.path.dirname(diretorio_atual)
-# Diretório avó do diretório pai
-diretorio_avo = os.path.dirname(diretorio_pai)
+diretorio_pai = os.path.dirname(diretorio_atual)  # Diretório pai do diretório atual
+diretorio_avo = os.path.dirname(diretorio_pai)  # Diretório avó do diretório pai
 pasta = f"{diretorio_avo}/Banco_de_palavras"
 
 # pasta = '../../Banco_de_palavras'
@@ -149,9 +147,11 @@ for comando in range(quantidadeComandos):
         #print(tabela[0])
     
 # Escrevendo os dados do array para o arquivo CSV 
-with open("treinocsvteste", 'w', newline='') as csvfile:
+arquivo = f"{diretorio_atual}/treinocsvteste.csv"
+with open(arquivo, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=';')
     writer.writerows(tabela)
+    print("treinocsvteste gravado")
 
 '''O comando "comm > nome_do_arquivo.csv" deverá ser usado no terminal,
 afim de gravar as saidas da função "sys.stdout.write()" em um arqui .csv
