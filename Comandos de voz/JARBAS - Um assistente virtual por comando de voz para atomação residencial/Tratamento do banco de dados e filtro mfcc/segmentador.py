@@ -10,16 +10,8 @@ def segmentarAudio(audio):
     :return: Áudio sem a região silênciosa de duração de 1,1 segundos
     """
 
-    xi = audio
-    # Muitos microprocessadores causam um estalo no início da gravação, atingindo a máxima amplitude
-    estalo = 100
-    xi[0:estalo] = 0  # zera as primeiras 100 amostras do audio
-
-    # normalização do amplitude de 16 bits. Isso deixa a amplitude entre um intervalo de 1 e -1
-    xi = xi / 32768.0
-
-    x = []
-    x = np.append(xi[0], xi[1:] - 0.97 * xi[:-1])  # filtro de pre-enfase
+    x = audio
+    
 
     # n = np.arange(0, len(x))
 
@@ -27,9 +19,8 @@ def segmentarAudio(audio):
 
     win = 3200
     step = 800
-    # Calcula a energia contida no vetor x
-    # define o tamanho do vetor energia
-    energy = np.zeros(int((len(x)-win)/step))
+    # Calcula a energia contida no vetor x    
+    energy = np.zeros(int((len(x)-win)/step)) # define o tamanho do vetor energia
     for i in range(len(energy)):
         tmp = 0
         for j in range(i*step, i*step+win):  # calcula a energia dentro da janela definida
@@ -37,13 +28,12 @@ def segmentarAudio(audio):
             tmp = tmp + x[j]*x[j]
         energy[i] = tmp  # vetor com a energia de cada janela
 
-    # indice  onde foi encontrado o maior valor da amostra energy
-    iMax = np.argmax(energy)
+    
+    iMax = np.argmax(energy)    # indice  onde foi encontrado o maior valor da amostra energy
     vMax = energy[iMax]  # o maior valor da amostra energy
     iMin = np.argmin(energy)  # índice com o menor valor de energy
-    # Menor valor de energia, usado para achar o limiar entre região de fala e de  silencio
-    vMin = energy[iMin]
-    # print(f"iMin; {iMin}")
+    vMin = energy[iMin] # Menor valor de energia, usado para achar o limiar entre região de fala e de  silencio
+    #print(f"vMax; {vMax}")
 
     # calcula o limiar inferior de energia
     A = 0.03
@@ -119,11 +109,11 @@ def segmentarAudio(audio):
     plt.subplot(4, 1, 1)
     plt.plot(energy)
     plt.subplot(4, 1, 2)
-    plt.plot(xi)
-    plt.subplot(4, 1, 3)
     plt.plot(x)
-    plt.subplot(4, 1, 4)
+    plt.subplot(4, 1, 3)
     plt.plot(y)
+    plt.subplot(4, 1, 4)
+    plt.plot(z)
     plt.show()
 
     return z
