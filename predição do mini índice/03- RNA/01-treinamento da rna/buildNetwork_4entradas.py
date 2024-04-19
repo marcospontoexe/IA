@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-#import pybrain   # pip install https://github.com/pybrain/pybrain/archive/0.3.3.zip
+#import pybrain   # pip install https://github.com/pybrain/pybrain/archive/0.3.3.zip 
 
 import matplotlib.pyplot as plt
 from pybrain.tools.shortcuts import buildNetwork	# usado para construir a estrutura de uma rna
