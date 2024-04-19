@@ -103,10 +103,10 @@ for comando in range(quantidadeComandos):
 
         # transformando a matriz de 13x10 amostras, em um vetor de uma dimensão apenas, com 130 amostras.
         for i in range(0, chunks):
-            for j in range(0, quantidadeCoeficienteMFCC):
-                linhas.append(mfcc_norm[i][j])                                
+            for j in range(0, quantidadeCoeficienteMFCC):                                               
                 #sys.stdout.write(str(mfcc_norm[i][j]))
                 #sys.stdout.write(';')
+                linhas.append(mfcc_norm[i][j]) 
 
         if (comando == 0):
             #sys.stdout.write('1;0;0;0;0;0;0;0;0;0;')             
@@ -329,11 +329,10 @@ for comando in range(quantidadeComandos):
         # transformando a matriz de 13x10 amostras, em um vetor de uma dimensão apenas, com 130 amostras.
         for i in range(0, chunks):
             for j in range(0, quantidadeCoeficienteMFCC):
-                linhas.append(mfcc_norm[i][j])
-                #linhas.append(';')
                 #sys.stdout.write(str(mfcc_norm[i][j]))
                 #sys.stdout.write(';')
-
+                linhas.append(mfcc_norm[i][j])         
+                
         if (comando == 0):
             #sys.stdout.write('1;0;0;0;0;0;0;0;0;0;')             
             linhas.append(1)

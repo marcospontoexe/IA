@@ -6,7 +6,7 @@ from pybrain.structure.modules import SoftmaxLayer, LSTMLayer
 from pybrain.structure.modules import SigmoidLayer
 from pybrain.structure.modules import TanhLayer
 from pybrain.structure.modules import BiasUnit
-from pybrain.tools.customxml import NetworkWriter	#necessário pybrain v0.3.3
+from pybrain.tools.customxml import NetworkWriter	#necessário pybrain v0.3.3 (pip install https://github.com/pybrain/pybrain/archive/0.3.3.zip)
 
 #import pybrain3
 import numpy as np
