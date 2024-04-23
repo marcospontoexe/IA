@@ -87,7 +87,7 @@ Ao final do processo defiltragem MFCC, o código "mfcc.py" gera dois arquivos .C
 Leia a seção [2.6 e 3.4](https://github.com/marcospontoexe/IA/blob/main/Comandos%20de%20voz/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial/JARBAS%20-%20Um%20assistente%20virtual%20por%20comando%20de%20voz%20para%20atoma%C3%A7%C3%A3o%20residencial.pdf) para mais detalhes do algoritmo **MFCC**.
 
 ### Treino da RNA
-* Em construção...*
+*Em construção...*
 
 ### Jarbas
-* Em construção...*
+*Em construção...*
