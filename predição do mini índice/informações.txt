@@ -90,3 +90,4 @@ ALTERAÇÕES:
 *diminuir de 40 para 5, ou de 32 para 4 entradas
 
 *De um dataset de 100 amostras, por exemplo, usar os primeiros 99 em ordem cronológica para treinamento, com a finalidade de prever o 100°.
+*Usar aprendizagem não supervisionada (agrupamento-clusterização) para verificar se consegue achar trÊs grupos (compra-lateral-venda).
