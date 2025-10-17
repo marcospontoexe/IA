@@ -91,3 +91,8 @@ ALTERAÇÕES:
 
 *De um dataset de 100 amostras, por exemplo, usar os primeiros 99 em ordem cronológica para treinamento, com a finalidade de prever o 100°.
 *Usar aprendizagem não supervisionada (agrupamento-clusterização) para verificar se consegue achar trÊs grupos (compra-lateral-venda).
+
+*Usar as informações de uma unica vela diária ao invez de 8 velas horárias para descobrir a qual grupo a vela pertence (compra-lateral-venda) com knn ou naive bayes.
+
+*usar regressão para prever o valor de fechamento da ultima vela horária do dia.
+* testar ensembles
