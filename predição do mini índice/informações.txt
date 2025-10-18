@@ -101,3 +101,4 @@ ALTERAÇÕES:
 * Os horários de maior volatilidade e volume são: 10h, 11h, 12h, 9h e 15h
 * Os horários de menor volatilidade e volume são 18h, 17h, 13h, 16h e 14h
 * Analisar os candles das 9h e 10h, em período de 5 minutos, para prever os primeiros 5 minutos do candle das 11h.
+* Prever os ultimos 5 minutos de um determinado horário, usando informações do candle de 5 minutos para aquele horário específico.
