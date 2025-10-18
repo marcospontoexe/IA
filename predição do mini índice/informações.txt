@@ -96,3 +96,5 @@ ALTERAÇÕES:
 
 *usar regressão para prever o valor de fechamento da ultima vela horária do dia.
 * testar ensembles
+
+* usar períodos baseado no horário de verão e inverno do mercado americano e europeu, não misturar esses períodos.
