@@ -79,7 +79,7 @@ verificar o correlação das variáveis, talvez cor e tamNor estejão correlacio
 treinar toda sexta (ultimo ano), para usar na semana seguinte
 
 
-
+https://ranaroussi.github.io/yfinance/reference/index.html
 
 ALTERAÇÕES:
 *diminuir a dimensão: fornecer somente tamanho da vela, ou variação de preço (possível correlação)
