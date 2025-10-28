@@ -93,7 +93,7 @@ ALTERAÇÕES:
 *De um dataset de 100 amostras, por exemplo, usar os primeiros 99 em ordem cronológica para treinamento, com a finalidade de prever o 100°.
 *Usar aprendizagem não supervisionada (agrupamento-clusterização) para verificar se consegue achar trÊs grupos (compra-lateral-venda).
 
-* Usar Previsão de Séries Temporais; usam os valores passados da própria variável predita para prever seus futuros valores preditos. São projetados para capturar tendências, sazonalidade e outros padrões temporais. É a melhor abordagem para capturar padrões que dependem estritamente da sequência temporal, como a sazonalidade.
+* Usar Previsão de Séries Temporais (regressão, arima, prophet); usam os valores passados da própria variável predita para prever seus futuros valores preditos. São projetados para capturar tendências, sazonalidade e outros padrões temporais. É a melhor abordagem para capturar padrões que dependem estritamente da sequência temporal, como a sazonalidade.
 * veificar a sazonalidade dos paramentros com a função seasonal_decompose da biblioteca statsmodels.
 
 *Usar as informações de uma unica vela diária ao invez de 8 velas horárias para descobrir a qual grupo a vela pertence (compra-lateral-venda) com knn ou naive bayes. Para isso todos os dados devem estar na mesma escala, e não deve ter muitos atributos de entrada. 
