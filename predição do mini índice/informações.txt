@@ -84,22 +84,23 @@ https://ranaroussi.github.io/yfinance/reference/index.html
 ALTERAÇÕES:
 *diminuir a dimensão: fornecer somente tamanho da vela, ou variação de preço (possível correlação)
 *proporção de dados entre as classes (compra, lateral, venda)
-*aplicar padronização após a normalização
+*aplicar padronização ou normalização?
 *criar entradas parcialmente conectadas: valor(N1,N5,N9...), tamanho(N2,N6,N10...), variação(N3,N7,N11...) e volume(N4,N8,N12...)
 *verificar outlyer
 *diminuir de 40 para 5, ou de 32 para 4 entradas
 * usar outras constantes (dolar, preço/demanda, dia da semana, mes...)
 
-*De um dataset de 100 amostras, por exemplo, usar os primeiros 99 em ordem cronológica para treinamento, com a finalidade de prever o 100°.
-*Usar aprendizagem não supervisionada (agrupamento-clusterização) para verificar se consegue achar trÊs grupos (compra-lateral-venda).
+* Discretização: transformar variáveis contínuas em categorias ou intervalos discretos (volume: baixo(0), médio-baixo(1), médio(2), médio-alto(3), alto(4), muito-alto(5)...)
 
-* Usar Previsão de Séries Temporais (regressão, arima, prophet); usam os valores passados da própria variável predita para prever seus futuros valores preditos. São projetados para capturar tendências, sazonalidade e outros padrões temporais. É a melhor abordagem para capturar padrões que dependem estritamente da sequência temporal, como a sazonalidade.
+*De um dataset de 100 amostras, por exemplo, usar os primeiros 99 em ordem cronológica para treinamento, com a finalidade de prever o 100°.
+
+*Usar aprendizagem não supervisionada (agrupamento-clusterização) para verificar se consegue achar trÊs grupos (compra-lateral-venda).
+*Usar as informações de uma unica vela diária ao invez de 8 velas horárias para descobrir a qual grupo a vela pertence (compra-lateral-venda) com knn ou naive bayes. Para isso todos os dados devem estar na mesma escala, e não deve ter muitos atributos de entrada. 
+
+* Usar Previsão de Séries Temporais (regressão, arima, prophet); usam os valores passados da própria variável predita para prever seus futuros valores preditos(fechamento, volume). São projetados para capturar tendências, sazonalidade e outros padrões temporais. É a melhor abordagem para capturar padrões que dependem estritamente da sequência temporal, como a sazonalidade.
 * veificar a sazonalidade dos paramentros com a função seasonal_decompose da biblioteca statsmodels.
 * Arima: https://machinelearningmastery.com/arima-for-time-series-forecasting-with-python/
 
-*Usar as informações de uma unica vela diária ao invez de 8 velas horárias para descobrir a qual grupo a vela pertence (compra-lateral-venda) com knn ou naive bayes. Para isso todos os dados devem estar na mesma escala, e não deve ter muitos atributos de entrada. 
-
-*usar regressão para prever o valor de fechamento da ultima vela horária do dia.
 * testar ensembles
 
 * usar períodos baseado no horário de verão e inverno do mercado americano e europeu, não misturar esses períodos.
