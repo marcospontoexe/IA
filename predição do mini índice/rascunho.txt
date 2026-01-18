@@ -1,10 +1,11 @@
-como posso veificar a sazonalidade das features com a função seasonal_decompose da biblioteca statsmodels.
 
-para criar uma label do tamanho do corpo da vela, é melhor usar "abs(fechamento - abertura)" ou "(fechamento - abertura)"
 
-me explique melhor:
-Tamanho da sombra superior (`máximo - max(abertura, fechamento)`).
+
+
+
 
 me explique melhor:
 Cruzamento de Médias: Se MA_3 > MA_9, é um sinal de que a tendência de curto prazo está ficando mais forte que a de longo prazo (sinal de compra). Se MA_3 < MA_9, é um sinal de venda. A RNA pode aprender a identificar esses cruzamentos.
 
+Quero criar uma rna semisupervisionada para classicar os grupos de labels.
+As features usadas serão as seguintes:
