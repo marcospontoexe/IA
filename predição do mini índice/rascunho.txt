@@ -1,11 +1,10 @@
+Movimento Normalizado pela Volatilidade (ATR)
 
 
 
 
 
 
-me explique melhor:
-Cruzamento de Médias: Se MA_3 > MA_9, é um sinal de que a tendência de curto prazo está ficando mais forte que a de longo prazo (sinal de compra). Se MA_3 < MA_9, é um sinal de venda. A RNA pode aprender a identificar esses cruzamentos.
 
 Quero criar uma rna semisupervisionada para classicar os grupos de labels.
 As features usadas serão as seguintes:
