@@ -1,4 +1,9 @@
-Movimento Normalizado pela Volatilidade (ATR)
+1. deixar apenas os labels:
+- retorno total
+- drowndown
+- runup
+
+2. criar apenas tres cluster
 
 
 

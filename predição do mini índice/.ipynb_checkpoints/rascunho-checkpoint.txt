@@ -1,4 +1,9 @@
-Movimento Normalizado pela Volatilidade (ATR)
+1. deixar apenas os labels:
+- retorno total
+- drowndown
+- runup
+
+2. criar apenas tres cluster
 
 
 
@@ -6,5 +11,14 @@ Movimento Normalizado pela Volatilidade (ATR)
 
 
 
-Quero criar uma rna semisupervisionada para classicar os grupos de labels.
+Quero criar uma rna semisupervisionada para classicar os grupos de labels em (super compra, compra, lateral de baixa volatilidade, Lateral e de Alta Volatilidade, venda e super venda.
 As features usadas serão as seguintes:
+* retorno_total: (Fechamento_11:55 - Abertura_11:00) / Abertura_11:00.
+* volatilidade_total: (Maxima_periodo - Minima_periodo) / Abertura_11:00. 
+* posicao_fechamento: (Fechamento_11:55 - Minima_periodo) / (Maxima_periodo - Minima_periodo). 
+* drawdown_maximo: (Abertura_11:00 - Minima_periodo) / Abertura_11:00. 
+* runup_maximo: (Maxima_periodo - Abertura_11:00) / Abertura_11:00. 
+* volume_medio_normlizado (min_periods=1)
+
+faça um código em python, para o jupyter notebook, que execute todas as etapas da fase 1, Geração dos Labels com Clusterização (K-Means).
+O nome do bando de dados a ser lido é "WIN_9h-12h.csv".
