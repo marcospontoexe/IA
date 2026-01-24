@@ -1,3 +1,5 @@
+ A lógica dias_completos == 24 assume que a janela das 09:00-10:55 sempre terá 24 candles de 5 minutos. 
+
 faça um código que carregue o dataframe (WIN_9h-12h.csv), filtre os candles das 9h00 ate 10h55, e calcule as seguites features para cada vela;
 * A Magnitude da Decisão: abs(fechamento - abertura) / Abertura
 * O Movimento Direcional: +1 caso o corpo da vela seja positivo, 0 caso o corpo da vela seja nulo, e -1 caso seja corpo negativo.
