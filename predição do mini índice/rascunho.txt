@@ -1,38 +1,9 @@
- A lógica dias_completos == 24 assume que a janela das 09:00-10:55 sempre terá 24 candles de 5 minutos. 
+incluir o preço do dolar.
+Usar validação cruzada.
+usar dbscan 
 
-faça um código que carregue o dataframe (WIN_9h-12h.csv), filtre os candles das 9h00 ate 10h55, e calcule as seguites features para cada vela;
-* A Magnitude da Decisão: abs(fechamento - abertura) / Abertura
-* O Movimento Direcional: +1 caso o corpo da vela seja positivo, 0 caso o corpo da vela seja nulo, e -1 caso seja corpo negativo.
-* Pavio Superior: (máximo - max(abertura, fechamento)) / Abertura
-* Pavio inferior: ( min(abertura, fechamento) - mínimo) / Abertura
-* range_candle: (Maxima - Minima) / Abertura
-* volume_real: O Volume_Real do candle (normalizado, por exemplo, pela média móvel do volume).
-* volume_tick normalizado: O Volume_Tick do candle (também normalizado).
-* Tamanho Médio da Ordem = Volume Real / Volume de Ticks
-* diferenca_MA = (MA_3 - MA_9) / Preco_Fechamento. MA_3 é a média movel dos ultimos tres fechamentos, e MA_9 das últimas 9 fechamentos.
-* RSI
-* macd
 
-Depois faça um achatamento (Flatten) das Features e salve em um novo dataframe
-
-o código anexado faz o seguinte:
-1. abre o dataframe com os dados brutos das 9h00 até 11:55.
-2. usa as velas das 11:00 até 11:55 para criar variáveis que serão usadas para criar as features, as features serão usada para criar as label (compra, venda, lateral).
-3. salva e exibe o resultado final.
-Faça uma alteração nesse código, mantenha o inicio do código o mesmo, a parte de salvar o resultado em um novo dataframe (NOME_ARQUIVO_SAIDA) deve ser removida. Após criar o novo dataframe com as labels, inclua mais algumas etapas:
-1. calcule as seguites features para cada vela, essas features serão usadas para treinar a rna;
-* A Magnitude da Decisão: abs(fechamento - abertura) / Abertura
-* O Movimento Direcional: +1 caso o corpo da vela seja positivo, 0 caso o corpo da vela seja nulo, e -1 caso seja corpo negativo.
-* Pavio Superior: (máximo - max(abertura, fechamento)) / Abertura
-* Pavio inferior: ( min(abertura, fechamento) - mínimo) / Abertura
-* range_candle: (Maxima - Minima) / Abertura
-* volume_real: O Volume_Real do candle (normalizado, por exemplo, pela média móvel do volume).
-* volume_tick normalizado: O Volume_Tick do candle (também normalizado).
-* Tamanho Médio da Ordem = Volume Real / Volume de Ticks
-* diferenca_MA = (MA_3 - MA_9) / Preco_Fechamento. MA_3 é a média movel dos ultimos tres fechamentos, e MA_9 das últimas 9 fechamentos.
-* RSI
-* macd
-2. crie um novo dataframe (dataset_bruto.csv) que será usado como dataset inicial no processo de treinamento da rna, futuramente o dataset_bruto.csv será tratado novamente (normalização, redução de dimensão, analise de correlação e covariaça...). O dataset_bruto.csv deverá ter a seguinte estrutura:
-* cada linha representa um dia.
-* cada coluna representa uma feature, que deverão apresentar primeiro as features da vela das 9:00, depois as features da vela das 9:05, depois das 9:10, até a vela das 10:55.
-* os dados do dataframe NOME_ARQUIVO_SAIDA (label) devem ser anexados ao dataset_bruto.csv no formato one-hot encoding, esses dados ficaram nas ultimas colunas de cada linha, representando o label de cada dia para as velas das 9:00 às 10:55.
+faça um código que importe o dataframe WIN$N_H1.csv, que contem os dados OHLCV das velas de 1 hora da abertura até o fechamento do pregão dos ultimos 5 anos. Use apenas os dados da coluna CLOSE.
+Faça um teste estatístico, como o Teste de Dickey-Fuller Aumentado. 
+Diga se a série é estacionária.
+Aplique uma diferenciação d=1, e diga novamente se a série é estacionária.
