@@ -1,5 +1,4 @@
 incluir o preço do dolar.
-Usar validação cruzada.
 usar dbscan 
 
 
