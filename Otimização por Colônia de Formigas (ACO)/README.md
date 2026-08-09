@@ -6,7 +6,7 @@ picking* em armazéns, com avaliação experimental controlada.
 
 Tudo escrito do zero em Python, sem biblioteca de otimização pronta.
 
-![Rotas de separação: S-shape vs. ACO](figuras/fig1_rotas.png)
+![Rotas de separação: S-shape vs. ACO](fig1_rotas.png)
 
 > Mesmo lote de itens, duas estratégias de percurso. À esquerda, a heurística *S-shape* que os
 > sistemas de gestão de armazém costumam embutir; à direita, a rota construída pela colônia de
@@ -59,7 +59,7 @@ Três experimentos, todos no notebook:
 **2. Experimento fatorial** — uma onda de 60 pedidos nas quatro combinações possíveis, para isolar a
 contribuição de cada componente:
 
-![Convergência e contribuição de cada componente](figuras/fig2_convergencia.png)
+![Convergência e contribuição de cada componente](fig2_convergencia.png)
 
 | Configuração | Distância total | Redução |
 |---|---|---|
@@ -70,7 +70,7 @@ contribuição de cada componente:
 
 **3. Escalabilidade** — ondas de 30/60/120 pedidos, 8 réplicas independentes cada:
 
-![Escalabilidade](figuras/fig3_escalabilidade.png)
+![Escalabilidade](fig3_escalabilidade.png)
 
 | Tamanho da onda | Redução média | Desvio-padrão |
 |---|---|---|
@@ -131,7 +131,9 @@ ler o resultado inteiro sem executar nada. Os números medidos ficam consolidado
 ```
 otimizacao_picking.ipynb   notebook completo, executado
 resultados.json            indicadores medidos na última execução
-figuras/                   gráficos gerados pelo notebook
+fig1_rotas.png             rotas S-shape vs. ACO num mesmo lote
+fig2_convergencia.png      convergência dos algoritmos e experimento fatorial
+fig3_escalabilidade.png    ganho por tamanho de onda
 ```
 
 ## Referências
