@@ -7,7 +7,7 @@
 > **1.240 amostras úteis** (2021-08-12 a 2026-08-12), contra 895 do ficheiro truncado e 121 do M1.
 > Validação de fuso: 100,00% de coincidência de preços em 99.999 timestamps comuns com o ficheiro
 > antigo — sem desvio horário. Ver §7.
-> As secções 1–4 abaixo descrevem o diagnóstico original e ficam como registo histórico.
+> As seções 1–4 abaixo descrevem o primeiro diagnóstico e ficam como registro histórico.
 
 - **Data:** 2026-08-12
 - **Ficheiros:** [WIN$N_M1_BRUTO.csv](../WIN$N_M1_BRUTO.csv), [WIN$N_M5_BRUTO.csv](../WIN$N_M5_BRUTO.csv), [WIN$N_M30_BRUTO.csv](../WIN$N_M30_BRUTO.csv), [WIN$N_H1_BRUTO.csv](../WIN$N_H1_BRUTO.csv)
@@ -201,7 +201,7 @@ Ganho face ao M5 truncado: **1,39×**. Face ao M1 usado no notebook: **10,2×**.
 Walk-forward de 5 folds (206 dias de teste cada), GradientBoosting vs. `DummyClassifier`,
 15 features agregadas, razão 83:1. Dois esquemas de rotulagem.
 
-### A — Label fixo original (retorno > 50 pts, pavio < 250 pts)
+### A — Label fixo da ideia primária (retorno > 50 pts, pavio < 250 pts)
 
 Distribuição: Lateral 428 | Venda 424 | Compra 388
 
@@ -302,7 +302,7 @@ corretamente a ausência de sinal, o que dá confiança de que os números acima
 
 **Manter `09:00–10:59 → 11:00–11:59`** como configuração primária, por quatro razões:
 
-1. **É a configuração original.** Trocá-la com base neste sweep seria escolher o máximo de 7
+1. **É a configuração da ideia primária.** Trocá-la com base neste sweep seria escolher o máximo de 7
    testes — precisamente a garimpagem de dados que invalida o paper.
 2. **É a mais estável entre as positivas** (dp entre folds 0,039 contra 0,085 da "entrada 3h").
 3. **Preserva a tese económica**: entrar às 11:00 e sair às 12:00.

@@ -27,7 +27,7 @@ funcionar, e os resultados confirmam-no.
   `atr_dia_anterior`, `mm20_diaria`, `range_dia_anterior` e `posicao_range_d1` usam `.shift(1)`
   corretamente. O `gap` compara a abertura do dia (09:00) com o fechamento do dia anterior — ambos
   conhecidos antes das 11:00. Não há fuga do futuro nestas features.
-- **Células 113 e 114** (abordagem enxuta) — de longe a melhor parte do notebook. Ver secção 6.
+- **Células 113 e 114** (abordagem enxuta) — de longe a melhor parte do notebook. Ver seção 6.
 
 ---
 

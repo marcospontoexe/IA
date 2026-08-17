@@ -147,7 +147,7 @@ não escondido.
    (López de Prado; Demšar; Arnott, Harvey & Markowitz "A Backtesting Protocol").
 3. **Dados** — MT5, `WIN$N`, M5, 2021–2026, limpeza, não-estacionariedade.
 4. **Definição do problema e rotulagem** — janela 09:00–10:59 → 11:00–11:59; regra de label;
-   análise de sensibilidade aos limiares (**secção crítica** — mostrar que o resultado não depende
+   análise de sensibilidade aos limiares (**seção crítica** — mostrar que o resultado não depende
    de escolher 50/250).
 5. **Metodologia** — features, arquiteturas, protocolo walk-forward, nested CV, sementes.
 6. **Resultados** — tabela média ± dp por arquitetura, diagrama de diferença crítica, teste de
@@ -183,7 +183,7 @@ não escondido.
    Orçamentar tempo de computação.
 5. Análise estatística (Friedman + Nemenyi + permutação).
 6. Avaliação económica.
-7. Escrever, começando pela secção de Metodologia.
+7. Escrever, começando pela seção de Metodologia.
 
 **Regra de ouro:** decidir os critérios de sucesso e os testes estatísticos **antes** de olhar
 para os resultados finais. Idealmente, registar o plano (pre-registration) num repositório com

@@ -26,29 +26,59 @@ Escolhi esses horários porque eles cercam os dois momentos de maior energia do 
 fechamento anterior, e a **abertura americana às 11:30**, quando entra volume novo e o
 S&P 500 começa a arrastar o Ibovespa junto.
 
-### Status: resultado nulo até agora
+### Status: resultado nulo, agora com o holdout fechado
 
-Não vou enfeitar. Onze modelos testados, nenhum bateu o baseline trivial:
+Não vou enfeitar. Onze modelos, 976 dias de trabalho, 10 sementes nos tabulares:
 
-| Modelo | Acurácia | Ganho sobre o baseline |
-|---|---|---|
-| **Baseline (classe majoritária)** | **0,352** | — |
-| MLP | 0,354 | −0,000 |
-| LSTM | 0,345 | −0,010 |
-| XGBoost | 0,343 | −0,009 |
-| CNN 1D | 0,343 | −0,011 |
-| Gradient Boosting | 0,340 | −0,012 |
-| Random Forest | 0,340 | −0,012 |
-| TCN | 0,335 | −0,019 |
-| SVM (RBF) | 0,327 | −0,025 |
-| Regressão logística | 0,305 | −0,047 |
+| Modelo | Acurácia | ±dp | Ganho sobre o baseline |
+|---|---|---|---|
+| XGBoost | 0,3604 | 0,0061 | +0,0085 |
+| Gradient Boosting | 0,3581 | 0,0103 | +0,0063 |
+| CNN 1D | 0,3549 | 0,0031 | +0,0008 |
+| **Baseline (classe majoritária)** | **0,3519** | 0,0000 | — |
+| LSTM | 0,3491 | 0,0053 | −0,0050 |
+| Random Forest | 0,3479 | 0,0064 | −0,0040 |
+| SVM (RBF) | 0,3469 | 0,0000 | −0,0049 |
+| MLP | 0,3416 | 0,0037 | −0,0124 |
+| Baseline (estratificado) | 0,3401 | 0,0131 | −0,0117 |
+| TCN | 0,3342 | 0,0083 | −0,0199 |
+| Regressão logística | 0,3136 | 0,0000 | −0,0383 |
 
-Teste de permutação com 200 embaralhamentos: **p = 0,33**. Friedman entre os modelos:
-**p = 0,079** — nem diferença entre eles dá para detectar. E no backtest *out-of-fold*, já
-com custo de 3 pontos por operação, a coisa fecha em **−13.115 pontos (−R$ 2.623)**.
+Três modelos ficam acima do baseline — e **nenhum de forma significativa**. Teste de
+permutação com 200 embaralhamentos no XGBoost: **p = 0,144**. Friedman entre os sete
+tabulares: **p = 0,463**, e o baseline majoritário termina em **3º de 7**, à frente de
+quatro modelos reais. Nas 21 features, 3 diferem entre classes a p < 0,05 (esperado ~1) e
+**nenhuma sobrevive a Bonferroni**. No backtest *out-of-fold*, com custo medido de 7 pontos
+por operação: **−8.344 pontos (−R$ 1.668,80)**.
+
+#### O holdout foi aberto — uma vez
+
+Os 244 dias finais (2025-08-18 a 2026-08-12), que nenhuma decisão do projeto encostou:
+
+| | |
+|---|---|
+| Baseline | 0,3238 |
+| Modelo (XGBoost) | 0,3811 |
+| **Ganho** | **+5,7 p.p.** |
+| Resultado econômico | +5.838 pontos (R$ 1.167,60) |
+
+À primeira vista, o melhor número do projeto. Três testes o desmontaram:
+
+1. **Poder estatístico.** O limiar mínimo detectável, calculado *antes* de abrir, era de
+   **8,4 p.p.** O ganho ficou em 5,7 (z = 1,91, p bilateral = 0,056).
+2. **Deriva de classe.** A classe majoritária mudou de Venda para Compra entre treino e
+   holdout, rebaixando o baseline. Contra a majoritária real do período, o ganho cai para
+   **3,7 p.p.** (p = 0,11) — **36% do ganho não era do modelo**.
+3. **P&L contra o acaso.** Em 20.000 estratégias aleatórias com as mesmas 161 operações, o
+   modelo caiu no **percentil 78** (z = 0,79, p = 0,218). Para dimensionar: no walk-forward,
+   a estratégia aleatória rendeu **+44,01 pontos por operação**, contra +36,26 do modelo no
+   holdout.
 
 Ou seja: prever direção nessa janela, com essas features, não funciona. É um resultado, e
 é por isso que ele está aqui em vez de estar escondido.
+
+> O que me salvou de tratar +5,7 p.p. e R$ 1.167 como descoberta foi ter escrito a regra de
+> decisão **antes** de olhar o número. Essa regra está na seção 13 do notebook.
 
 ---
 
@@ -87,6 +117,7 @@ Aprendi na marra que sem isso o resultado fica sempre bonito e sempre falso:
 | **Holdout aberto uma vez** | Segunda olhada já é treino disfarçado |
 | Resultado em **pontos e reais** | 40% de acerto em 3 classes ainda pode perder dinheiro |
 | **Teste de permutação** | É o que separa sinal de sorte |
+| **Toda semente declarada** | Sem isso, resultado fraco fica indistinguível de ruído de inicialização |
 
 E uma regra sobre mim mesmo: **a lista de variantes a testar é fechada antes de rodar
 qualquer uma**. Testar até achar uma que dá certo e reportar só essa é a forma mais fácil
@@ -106,8 +137,18 @@ Prever a direção de uma janela fixa de tempo. É onde estou.
 **Foco:** o *quê* vai acontecer.
 **Vantagem:** bem definida e fácil de testar.
 **Complexidade:** média.
-**Situação:** resultado nulo. Antes de fechar essa conclusão, quero rodar as variantes de
-adicionar o dólar, adicionar o futuro do S&P, e mover a janela-alvo para depois das 11:30.
+**Situação:** **resultado nulo, com o holdout fechado.** O ciclo principal terminou —
+walk-forward, permutação, Friedman, avaliação econômica e holdout, todos negativos. O que
+resta são as variantes pré-registradas: adicionar o dólar (V1), adicionar o futuro do S&P
+(V2), mover a janela-alvo para depois das 11:30 (V3), prever volatilidade em vez de direção
+(V4) e regressão do retorno (V5). A lista foi fechada antes de rodar qualquer uma.
+
+> Uma ressalva honesta sobre a V3: o holdout foi aberto com a janela de treino
+> (`09:00–10:59 → 11:00–11:59`), não com a `09:00–11:59 → 12:00–12:59` que eu tinha
+> planejado. A decisão está justificada no notebook — um holdout serve para validar *o mesmo
+> modelo* em dado novo, e trocar a janela na hora de abrir misturaria dois efeitos. O custo é
+> que **a hipótese das 11:30 perdeu o holdout limpo dela** e só pode ser testada em
+> walk-forward daqui em diante.
 
 ### 2. Timing de eventos — mudar o foco do "o quê" para o "quando"
 
@@ -214,12 +255,13 @@ classificação/
 ├── WIN$N_M5_BRUTO_COMPLETO.csv      ← base principal (1.248 pregões)
 ├── WIN$N_*_BRUTO.csv                ← WIN em M1, M5, M30, H1
 ├── WDO$N_*_BRUTO.csv                ← WDO nos mesmos timeframes
-├── CONTEXTO.md                      ← onde o trabalho parou
-├── CLAUDE.md                        ← índice da documentação
-└── DOCS/
-    ├── analise-timeframes.md        ← por que M5, escolha da janela, testes de sinal
-    └── protocolo-paper.md           ← protocolo para publicação científica
+├── resultados_vol_0900-1100.csv     ← tabela da última rodada
+└── resultados_vol_0900-1100_config.json  ← configuração que a gerou
 ```
+
+Cada rodada grava o par `.csv` + `_config.json`, com janela, esquema de rótulo, número de
+sementes, distribuição das classes e p-valor da permutação. É o que torna um resultado
+rastreável meses depois.
 
 ---
 
@@ -243,5 +285,21 @@ alta e nenhum baseline, uma execução só e nenhum teste de significância, ou 
 custo de transação. Esses trabalhos não replicam.
 
 O que eu quero aqui é o contrário: um resultado que **eu mesmo consiga desmontar** e que
-mesmo assim continue de pé. Se a conclusão for que não dá para prever, tudo bem — isso
+mesmo assim continue de pé. Se a conclusão for que não dá para prever, tudo bem, isso
 também é informação, e é informação que quase ninguém publica.
+
+### Isto aqui replica
+
+Rodei o notebook inteiro duas vezes, do zero, e comparei número por número. Acurácias,
+p-valores, resultado do backtest e do holdout: **todos idênticos**. Só os tempos de execução
+mudaram.
+
+Faço questão de registrar porque não é automático, e porque é justamente a parte que falta
+nos trabalhos que eu critico no parágrafo acima. Fixar `np.random.seed` não basta quando há
+TensorFlow envolvido: o framework tem gerador próprio, e sem prendê-lo as redes saem
+diferentes a cada execução. Aqui cada arquitetura chama `tf.keras.utils.set_random_seed`
+antes de ser construída, os modelos do scikit-learn recebem `random_state`, e a divisão dos
+folds é cronológica, portanto determinística.
+
+Para conferir, basta reiniciar o kernel e rodar tudo de novo. O detalhamento está na seção
+5.9 do notebook.
