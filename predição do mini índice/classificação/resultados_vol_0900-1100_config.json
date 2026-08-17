@@ -1,0 +1,28 @@
+{
+  "data": "2026-08-16 21:47",
+  "arquivo": "WIN$N_M5_BRUTO_COMPLETO.csv",
+  "janela_features": [
+    "09:00",
+    "10:59"
+  ],
+  "janela_alvo": [
+    "11:00",
+    "11:59"
+  ],
+  "esquema_label": "vol",
+  "n_trabalho": 976,
+  "n_holdout": 244,
+  "n_features": 21,
+  "n_splits": 5,
+  "sementes_tabular": 10,
+  "sementes_dl": 3,
+  "distribuicao": {
+    "Venda": 427,
+    "Compra": 401,
+    "Lateral": 392
+  },
+  "melhor_geral": "XGBoost",
+  "melhor_tabular": "XGBoost",
+  "permutacao_p": 0.14427860696517414,
+  "holdout_executado": true
+}
