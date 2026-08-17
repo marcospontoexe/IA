@@ -18,6 +18,7 @@ Classificador que prevê o comportamento do mini-índice na janela das 11:00–1
 | Análise técnica do notebook: diagnóstico, bugs e plano de correção | [DOCS/analise-notebook-M1.md](DOCS/analise-notebook-M1.md) |
 | Análise dos ficheiros brutos por timeframe + teste de sinal preliminar | [DOCS/analise-timeframes.md](DOCS/analise-timeframes.md) |
 | Protocolo experimental para publicação científica | [DOCS/protocolo-paper.md](DOCS/protocolo-paper.md) |
+| Rascunhos de divulgação no LinkedIn + checklist antes de publicar | [DOCS/post-linkedin.md](DOCS/post-linkedin.md) |
 
 ---
 
