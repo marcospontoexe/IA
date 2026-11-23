@@ -1,0 +1,17 @@
+{
+  "equipamento": "Motor M-101, bomba de água de resfriamento (leitura simulada)",
+  "data_hora": "2026-11-04 14:30",
+  "leituras": {
+    "vib_radial": 4.8,
+    "vib_axial": 3.1,
+    "pico_1x": false,
+    "pico_2x": true,
+    "freq_rolamento": true,
+    "ruido_mancal": true,
+    "temp_mancal": 94,
+    "temp_enrolamento": 112,
+    "corrente": 96,
+    "deseq_tensao": 0.6,
+    "deseq_corrente": 4
+  }
+}
